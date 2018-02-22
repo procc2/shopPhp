@@ -18,7 +18,7 @@
                           <td>{{category.CategoryName}}</td>
                           
                           <td>
-                            <button type="button" class="btn btn-danger" ng-click="deleteData(category.CategoryId)"><i class="fa fa-minus"></i></button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target = "#deleteModal" ng-click = "getDeletingId(category.CategoryId)"><i class="fa fa-minus"></i></button>
                             <button type="button" class="btn btn-info" ng-click="showDataEdit(category.CategoryId,category.CategoryName)"><i class="fa fa-edit"></i></button>
                           </td>
                         </tr>
@@ -43,9 +43,63 @@
                       <input type="text" placeholder="Category Name" class="form-control" ng-model = "cName">
                     </div>
                     <div class="form-group">       
-                      <input type="button" value="Nhập" class="btn btn-primary" ng-click="insertData()">
-                      <input type="button" value="Sửa" class="btn btn-info" ng-click="editData()">
+                      <input type="button" value="Nhập" class="btn btn-primary" data-toggle="modal" data-target = "#insertModal">
+                      <input type="button" value="Sửa" class="btn btn-info" data-toggle="modal" data-target = "#editModal">
                     </div>
                   </form>
                 </div>
               </div>
+                              <!-- Model delete -->
+                <div id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                    <div role="document" class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h3 id="exampleModalLabel" class="modal-title">Xoá sản phẩm</h3>
+                          <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Bạn đang chuẩn bị xoá 1 sản phẩm , bạn đã chắc chắn ?</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                          <button type="button" data-dismiss="modal" class="btn btn-danger" ng-click="deleteData(deletingId)">Xoá</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Insert model -->
+                    <div id="insertModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                    <div role="document" class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h3 id="exampleModalLabel" class="modal-title">Thêm sản phẩm</h3>
+                          <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Bạn có chắc chắn muốn thêm ?</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                          <button type="button" data-dismiss="modal" class="btn btn-primary" ng-click = "insertData()">Thêm</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Edit modal -->
+                    <div id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                    <div role="document" class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h3 id="exampleModalLabel" class="modal-title">Chỉnh sửa sản phẩm</h3>
+                          <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Bạn có chắc chắn muốn sửa không ?</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                          <button type="button" data-dismiss="modal" class="btn btn-info" ng-click="editData()">Sửa</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>

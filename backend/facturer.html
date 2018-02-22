@@ -1,6 +1,6 @@
 <div class="card">
                 <div class="card-header">
-                  <h4>Danh sách người dùng</h4>
+                  <h4>Danh sách danh mục</h4>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
@@ -8,19 +8,18 @@
                       <thead>
                         <tr>
                           <th>#</th>
-                          <th>Tên đăng nhập</th>
-                          <th>Quyền</th>
-                          <th></th>
+                          <th>Nhà sản xuất</th>
+                          
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="user in users.data">
-                          <th scope="row">{{user.userId}}</th>
-                          <td>{{user.userEmail}}</td>
-                          <td>{{user.Role}}</td>
+                        <tr ng-repeat="facturer in facturers.data">
+                          <th scope="row">{{facturer.manufacturerId}}</th>
+                          <td>{{facturer.manufacturerName}}</td>
+                          
                           <td>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target = "#deleteModal" ng-click = "getDeletingId(user.userId)"><i class="fa fa-minus"></i></button>
-                            <button type="button" class="btn btn-info" ng-click="showDataEdit(user.userId,user.userEmail,user.Role,user.userPassword)"><i class="fa fa-edit"></i></button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target = "#deleteModal" ng-click = "getDeletingId(facturer.manufacturerId)"><i class="fa fa-minus"></i></button>
+                            <button type="button" class="btn btn-info" ng-click="showDataEdit(facturer.manufacturerId,facturer.manufacturerName,facturer.logo)"><i class="fa fa-edit"></i></button>
                           </td>
                         </tr>
                       </tbody>
@@ -30,26 +29,22 @@
               </div>
 <div class="card">
                 <div class="card-header d-flex align-items-center">
-                  <h4>User</h4>
+                  <h4>Manufacturer</h4>
                 </div>
                 <div class="card-body">
                   <p>Chỉnh sửa dữ liệu </p>
                   <form>
                     <div class="form-group">
                       <label>Id</label>
-                      <input type="text" placeholder="User Id" class="form-control" ng-model = "uId">
+                      <input type="text" placeholder="Facturer Id" class="form-control" ng-model = "fId">
                     </div>
                     <div class="form-group">       
-                      <label>Email</label>
-                      <input type="text" placeholder="Vui lòng nhập email .." class="form-control" ng-model = "uEmail">
+                      <label>Nhà sản xuất </label>
+                      <input type="text" placeholder="facturer Name" class="form-control" ng-model = "fName">
                     </div>
-                    <div class="form-group">       
-                      <label>Password</label>
-                      <input type="password" placeholder="Vui lòng nhập password .." class="form-control" ng-model = "uPass">
-                    </div>
-                    <div class="form-group">       
-                      <label>Role</label>
-                      <input type="text" placeholder="Quyền" class="form-control" ng-model = "role">
+                   <div class="form-group">       
+                      <label>Đường dẫn logo </label>
+                      <input type="text" placeholder="Logo path" class="form-control" ng-model = "fLogo">
                     </div>
                     <div class="form-group">       
                       <input type="button" value="Nhập" class="btn btn-primary" data-toggle="modal" data-target = "#insertModal">
@@ -58,7 +53,7 @@
                   </form>
                 </div>
               </div>
-                              <!-- Model delete -->
+                  <!-- Model delete -->
                 <div id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
                     <div role="document" class="modal-dialog">
                       <div class="modal-content">
@@ -76,7 +71,7 @@
                       </div>
                     </div>
                   </div>
-                  <!-- Insert modal -->
+                  <!-- Insert model -->
                     <div id="insertModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
                     <div role="document" class="modal-dialog">
                       <div class="modal-content">
