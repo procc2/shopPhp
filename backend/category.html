@@ -13,8 +13,8 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="category in categories.data">
-                          <th scope="row">{{category.CategoryId}}</th>
+                        <tr ng-repeat="(key,category) in categories.data">
+                          <th scope="row">{{key+1}}</th>
                           <td>{{category.CategoryName}}</td>
                           
                           <td>
@@ -34,10 +34,6 @@
                 <div class="card-body">
                   <p>Chỉnh sửa dữ liệu </p>
                   <form>
-                    <div class="form-group">
-                      <label>Id</label>
-                      <input type="text" placeholder="Category Id" class="form-control" ng-model = "id">
-                    </div>
                     <div class="form-group">       
                       <label>Category</label>
                       <input type="text" placeholder="Category Name" class="form-control" ng-model = "cName">

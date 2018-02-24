@@ -1,4 +1,6 @@
-var admin = angular.module('admin', ['ngRoute'])
+"use strict";
+
+var admin = angular.module('admin', ["ngRoute","ngCookies"])
 .config(function($routeProvider) {
 	$routeProvider
 	.when('/',{
@@ -25,20 +27,26 @@ var admin = angular.module('admin', ['ngRoute'])
 		templateUrl : 'facturer.html',
 		controller : 'ManufacturerControl'
 	})
+	.when('/login',{
+		templateUrl : 'login.html',
+		controller : 'LoginController'
+	})
 })
-.controller('AdminController', function($rootScope,$http,$scope){
+.controller('AdminController', function($rootScope,$http,$scope,loginService){
 	$rootScope.title = "Admin Page";
+	$rootScope.isLogin = false;
+	$scope.logout = function () {
+		loginService.logout();
+	}
 })
 .controller('CategoryContrl', function($rootScope,$http,$scope,$route){
 	$rootScope.title = "Category Edit Page";
 	$http.get("../connect/category.php")
 	.then(function(response){
 		$scope.categories = response.data;
-		console.log(response.data);
 	});
 	$scope.insertData = function(){
 		$http.post('php/category/insertCategory.php', {
-			'cId' : $scope.id,
 			'cName' : $scope.cName
 		}).then(function(response){
 			console.log("Inserted");
@@ -85,7 +93,6 @@ var admin = angular.module('admin', ['ngRoute'])
 	});
 	$scope.insertData = function(){
 		$http.post('php/facturer/insertNewFacturer.php', {
-			'fId' : $scope.fId,
 			'fName' : $scope.fName,
 			'fLogo' : $scope.fLogo
 		}).then(function(response){
@@ -110,13 +117,12 @@ var admin = angular.module('admin', ['ngRoute'])
 		$scope.fLogo = fLogo;
 	};
 	$scope.editData = function(){
-		$http.post('php/facture/editFacturer.php', {
+		$http.post('php/facturer/editFacturer.php', {
 			'fId' : $scope.fId,
 			'fName' : $scope.fName,
 			'fLogo' : $scope.fLogo
 		}).then(function(response){
 			$route.reload();
-			console.log(response.data);
 		},function(error){
 			console.log(error);
 		})
@@ -125,10 +131,11 @@ var admin = angular.module('admin', ['ngRoute'])
 		$scope.deletingId = deletingId;
 	}
 })
-.controller('ProductContrl', function($rootScope,$http,$scope,$route){
+.controller('ProductContrl', function($rootScope,$http,$scope,$route,$cookies){
 	$rootScope.title = "Product Page ";
-	$http.get("../connect/product.php")
+	$http.get("../connect/product.php?isBackEnd")
 	.then(function(response){
+		console.log(response);
 		$scope.products = response.data;
 	});
 	$http.get("../connect/category.php")
@@ -144,14 +151,18 @@ var admin = angular.module('admin', ['ngRoute'])
 		.then(function(response){
 			$scope.productImages = response.data;
 			angular.forEach(response.data.data, function(value, key){
-				console.log(key  +":" + value[1]);
+
 				$scope.imagePaths.push({
-					'imagePath' : value[1].split('/')[1]
+					'imagePath' : value[1].split('/')[1],
+					'color' : value[2],
 				});
+				
 			});
 			console.log($scope.imagePaths);
+			
 		})
 	}
+	$scope.colors = ["Red","Gray","Blue","Gold","Black","Pink"];
 	$scope.imagePaths = [{}];
   	$scope.addfield=function(){
     	$scope.imagePaths.push({})
@@ -160,59 +171,62 @@ var admin = angular.module('admin', ['ngRoute'])
   		$scope.imagePaths.splice(-1,1)
   	}
 	$scope.insertData = function(){
-		console.log($scope.imagePaths);
 		$http.post('php/product/insertNewProduct.php', {
-			'pId' : $scope.pId,
 			'pName' : $scope.pName,
 			'pPrice' : $scope.pPrice,
 			'pImage' : $scope.pImage,
 			'categoryId' : $scope.categoryId,
 			'pDescript' : $scope.pDescript,
-			'facturerId' : $scope.facturerId
+			'facturerId' : $scope.facturerId,
+			'currentUser' : $cookies.get("currentUser")
 		}).then(function(response){
 			console.log("Inserted");
 			console.log(response);
+			$scope.insertProductImage(response.data,$scope.imagePaths);
 			$route.reload();
 		},function(error){
 			console.log(error);
 		})
+		
+	};
+	$scope.insertProductImage = function(id,imagePaths){
 		$http.post('php/product/insertProductImage.php', {
-			'pImages' : $scope.imagePaths,
-			'pId' : $scope.pId
+			'pImages' : imagePaths,
+			'pId' : id
 		}).then(function(response){
 			console.log(response.data);
 		},function(error){
 			console.log(error);
 		})
-	};
+	}
 	$scope.deleteData = function(deletingId){
+		console.log(deletingId);
 		$http.get('php/product/deleteProduct.php?id='+ deletingId )
 		.then(function(response){
 			console.log("Deleted");
+			console.log(response);
 			$route.reload();
 		},function(error){
 			console.log(error);
 		})
 	};
-	$scope.showDataEdit = function(pId,pName,pPrice,categoryId,pDescript,pImage,facturerId){
-		$scope.pId = pId;
-		$scope.pName = pName;
-		$scope.pPrice = pPrice;
-		$scope.pImage = pImage.split('/')[1];
-		$scope.categoryId = categoryId;
-		$scope.pDescript = pDescript;
-		$scope.facturerId = facturerId;
+	$scope.showDataEdit = function(product){
+		$scope.pId = product.productId;
+		$scope.pName = product.productName;
+		$scope.pPrice = product.productPrice;
+		$scope.categoryId = product.CategoryId;
+		$scope.pDescript = product.productDescript;
+		$scope.facturerId = product.manufacturerId;
 		//Remove all child rows for get instance image row
 		$scope.imagePaths = [];
 		//get row
-		$scope.getProductImage(pId);
+		$scope.getProductImage(product.productId);
 	};
 	$scope.editData = function(){
 		$http.post('php/product/editProduct.php', {
 			'pId' : $scope.pId,
 			'pName' : $scope.pName,
 			'pPrice' : $scope.pPrice,
-			'pImage' : $scope.pImage,
 			'categoryId' : $scope.categoryId,
 			'pDescript' : $scope.pDescript,
 			'facturerId' : $scope.facturerId
@@ -222,11 +236,12 @@ var admin = angular.module('admin', ['ngRoute'])
 		},function(error){
 			console.log(error);
 		})
+		console.log($scope.imagePaths);
 		$http.post('php/product/insertProductImage.php', {
 			'pImages' : $scope.imagePaths,
 			'pId' : $scope.pId
 		}).then(function(response){
-			console.log(response);
+			console.log(response.data);
 		},function(error){
 			console.log(error);
 		})
@@ -243,7 +258,6 @@ var admin = angular.module('admin', ['ngRoute'])
 	});
 	$scope.insertData = function(){
 		$http.post('php/user/insertNewUser.php', {
-			'uId' : $scope.uId,
 			'uEmail' : $scope.uEmail,
 			'Role' : $scope.role,
 			'uPass' : $scope.uPass
@@ -307,4 +321,77 @@ var admin = angular.module('admin', ['ngRoute'])
 		console.log(response3);
 		$scope.cartDetails = response3.data
 	});
+})
+.controller('LoginController', function($rootScope,loginService,$scope){
+	$rootScope.title = "Login";
+	$rootScope.isLogin = true;
+	$scope.login = function () {
+		var user = {};
+		user.email = $scope.email;
+		user.pass = $scope.pass;
+		loginService.login(user,$scope);
+		$scope.email="";
+		$scope.pass ="";
+		$rootScope.currentUser = user.email;
+	}
+})
+.factory('sessionService', function(){
+	return{
+		set:function(key,value){
+			return sessionStorage.setItem(key,value)
+		},
+		get:function(key) {
+			return sessionStorage.getItem(key)
+		},
+		destroy:function(key) {
+			return sessionStorage.removeItem(key)
+		}
+	};
+})
+.factory('loginService',function($http,$location,sessionService,$route,$cookieStore){
+	return{
+		login : function(data,scope) {
+			console.log(data);
+			var $promise = $http.post('php/user/findUser.php',data)
+			.then(function(response) {
+				if(response.data.status == 1){
+					var uSId = response.data.data;
+					sessionService.set('user',uSId);
+					$location.path('/');
+					console.log(data.email);
+					$cookieStore.put('currentUser',data.email);
+				}else{
+					console.log(response.data.msg);
+				}
+				
+			})
+		},
+		logout : function(){
+			sessionService.destroy('user');
+			$http.post('php/session/destroySession.php');
+			$location.path('/login');
+			$cookieStore.remove('currentUser');
+		},
+		isLogged : function () {
+			var $checkSessionServer = $http.post('php/session/checkSession.php');
+			return $checkSessionServer;
+		}
+		
+	};
+})
+.run(function($rootScope,$location,loginService){
+	var routePermission = ['/']; // required login
+	$rootScope.$on('$routeChangeStart', function(){
+		console.log(routePermission.indexOf($location.path()));
+		if (routePermission.indexOf($location.path()) != -1 ) {
+			var connected = loginService.isLogged()
+			.then(function(response){
+				console.log(response);
+				if(!response.data)
+				$location.path('/login');
+			})
+			
+		}
+	});
+
 })

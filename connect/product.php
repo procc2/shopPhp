@@ -7,6 +7,10 @@
 					."and product.productId = productImage.productId "
 					."and productimage.color =".$_GET["color"];
 	}
+	if (isset($_GET["isBackEnd"])) {
+		$qrProduct .= "join category on category.CategoryId = product.CategoryId ";
+		$qrProduct .= "join manufacturer on product.manufacturerId = manufacturer.manufacturerId";
+	}
 	$qrProduct .= " where 1 = 1 ";
 	if (isset($_GET["categoryId"])) {
 		# code...

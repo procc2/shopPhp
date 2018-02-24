@@ -30,12 +30,13 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
     <script type="text/javascript" src="../js/angular.min.js"></script>
     <script type="text/javascript" src="../js/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/angular-cookies.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
 
   </head>
   <body ng-controller="AdminController">
     <!-- Side Navbar -->
-    <nav class="side-navbar">
+    <nav class="side-navbar" ng-hide="isLogin">
       <div class="side-navbar-wrapper">
         <!-- Sidebar Header    -->
         <div class="sidenav-header d-flex align-items-center justify-content-center">
@@ -79,7 +80,7 @@
     </nav>
     <div class="page">
       <!-- navbar-->
-      <header class="header">
+      <header class="header" ng-hide="isLogin">
         <nav class="navbar">
           <div class="container-fluid">
             <div class="navbar-holder d-flex align-items-center justify-content-between">
@@ -131,14 +132,14 @@
                     <li><a rel="nofollow" href="#" class="dropdown-item all-notifications text-center"> <strong> <i class="fa fa-envelope"></i>Read all messages    </strong></a></li>
                   </ul>
                 </li>
-                <li class="nav-item"><a href="login.html" class="nav-link logout">Logout<i class="fa fa-sign-out"></i></a></li>
+                <li class="nav-item"><a href="" class="nav-link logout" ng-click="logout()">Logout<i class="fa fa-sign-out"></i></a></li>
               </ul>
             </div>
           </div>
         </nav>
       </header>
       <ng-view></ng-view>
-      <footer class="main-footer">
+      <footer class="main-footer" ng-hide="isLogin">
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-6">

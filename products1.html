@@ -150,7 +150,7 @@
 								</div>
 								<h5><a href="#!/single" ng-click="setClickedProduct(product.productId)">{{product.productName}}</a></h5> 
 								<div class="simpleCart_shelfItem">
-									<p><span>${{product.productPrice}}</span> <i class="item_price">${{product.productPrice - 30}}</i></p>
+									<p><span>${{product.productPrice}}</span> <i class="item_price">${{product.productPrice - 30/100 * product.productPrice}}</i></p>
 									<form action="#" method="post">
 										<input type="hidden" name="cmd" value="_cart" />
 										<input type="hidden" name="add" value="1" /> 

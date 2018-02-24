@@ -154,7 +154,7 @@
 				<a href="#" data-toggle="modal" data-target="#myModal88"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
 			</div>
 			<div class="w3l_logo">
-				<h1><a href="index.html">Electronic Store<span>Your stores. Your place.</span></a></h1>
+				<h1><a href="#!/">Electronic Store<span>Your stores. Your place.</span></a></h1>
 			</div>
 			<div class="search">
 				<input class="search_box" type="checkbox" id="search_box">
@@ -194,7 +194,7 @@
 				</div> 
 				<div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
 					<ul class="nav navbar-nav">
-						<li><a href="index.html" class="act">Home</a></li>	
+						<li><a href="#!/" class="act">Home</a></li>	
 						<!-- Mega Menu -->
 						<li class="dropdown">
 							<a href="#!/product" class="dropdown-toggle" data-toggle="dropdown">Products <b class="caret"></b></a>
@@ -203,7 +203,7 @@
 									<div class="col-sm-3">
 										<ul class="multi-column-dropdown">
 											<h6>Smart World</h6>
-											<li ng-repeat = "category in categories.data"><a href="" ng-click="getProductByCategoryId(category.CategoryId)">{{category.CategoryName}}</a></li>
+											<li ng-repeat = "category in categories.data"><a href="" ng-click="setClickedCategory(category.CategoryId); getProductByCategoryId(category.CategoryId)">{{category.CategoryName}}</a></li>
 											<!-- <li><a href="" ng-click = "getProductByCategoryId(1)">Laptop <span>New</span></a></li> 
 											<li><a href="" ng-click = "getProductByCategoryId(4)">All Tablets<span>New</span></a></li> -->
 										</ul>
@@ -261,7 +261,6 @@
 	
 	<ng-view id = "mainView">
 	<!-- banner-bottom -->
-	
 	<!-- //top-brands --> 
 	</ng-view>
 	

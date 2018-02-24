@@ -14,8 +14,8 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="user in users.data">
-                          <th scope="row">{{user.userId}}</th>
+                        <tr ng-repeat="(key,user) in users.data">
+                          <th scope="row">{{key+1}}</th>
                           <td>{{user.userEmail}}</td>
                           <td>{{user.Role}}</td>
                           <td>
@@ -35,10 +35,10 @@
                 <div class="card-body">
                   <p>Chỉnh sửa dữ liệu </p>
                   <form>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                       <label>Id</label>
                       <input type="text" placeholder="User Id" class="form-control" ng-model = "uId">
-                    </div>
+                    </div> -->
                     <div class="form-group">       
                       <label>Email</label>
                       <input type="text" placeholder="Vui lòng nhập email .." class="form-control" ng-model = "uEmail">

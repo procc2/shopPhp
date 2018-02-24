@@ -4,5 +4,5 @@
 		$fId = $data->fId;
 		$fName = $data -> fName;
 		$fImagePath = $data -> fLogo;
-		$mysqli->query("insert into manufacturer(manufacturerId,manufacturerName,logo) values('".$fId."','".$fName."','".$fImagePath."')");
+		$mysqli->query("insert into manufacturer(manufacturerName,logo) values('".$fName."','".$fImagePath."')");
  ?>s

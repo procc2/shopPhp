@@ -244,7 +244,6 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 	    	
 	    	$scope.product = product.data.data[0];
 	    	$rootScope.title = product.data.data[0]["productName"];
-	    	
 			$scope.getProductImage(product.data.data[0]);
 			console.log($scope.product);
 	    },function(error){

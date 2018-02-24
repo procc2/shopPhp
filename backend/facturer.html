@@ -13,8 +13,8 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="facturer in facturers.data">
-                          <th scope="row">{{facturer.manufacturerId}}</th>
+                        <tr ng-repeat="(key,facturer) in facturers.data">
+                          <th scope="row">{{key+1}}</th>
                           <td>{{facturer.manufacturerName}}</td>
                           
                           <td>
@@ -34,10 +34,10 @@
                 <div class="card-body">
                   <p>Chỉnh sửa dữ liệu </p>
                   <form>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                       <label>Id</label>
                       <input type="text" placeholder="Facturer Id" class="form-control" ng-model = "fId">
-                    </div>
+                    </div> -->
                     <div class="form-group">       
                       <label>Nhà sản xuất </label>
                       <input type="text" placeholder="facturer Name" class="form-control" ng-model = "fName">
