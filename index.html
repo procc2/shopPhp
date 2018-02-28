@@ -77,10 +77,10 @@
 										<div class="facts">
 											<div class="register">
 												<form action="#" method="post">			
-													<input name="Email" placeholder="Email Address" type="text" required="">						
-													<input name="Password" placeholder="Password" type="password" required="">										
+													<input name="Email" placeholder="Email Address" type="text" required="" ng-model="email">						
+													<input name="Password" placeholder="Password" type="password" required="" ng-model="pass">										
 													<div class="sign-up">
-														<input type="submit" value="Sign in"/>
+														<input type="button" data-toggle="modal" data-target="#loginSuccessModal" data-dismiss="modal" ng-click="login()" value="Sign in"/>
 													</div>
 												</form>
 											</div>
@@ -95,7 +95,7 @@
 													<input placeholder="Password" name="Password" type="password" required="">	
 													<input placeholder="Confirm Password" name="Password" type="password" required="">
 													<div class="sign-up">
-														<input type="submit" value="Create Account"/>
+														<input type="button" value="Create Account"/>
 													</div>
 												</form>
 											</div>
@@ -135,13 +135,23 @@
 			</div>
 		</div>
 	</div>
-	<!-- <script>
-		$('#myModal88').modal('show');
-	</script>   -->
-	<!-- header modal -->
-	<!-- Bird Loader -->
-	<!-- <div class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="images/bird_loader.gif" /></div></div> -->
-	<!-- Fontawesome Loader -->
+	<div id="loginSuccessModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                    <div role="document" class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Login Success !!</h4>
+				</div>
+                        <div class="modal-body">
+                          <h3>Welcome {{currentUser["userEmail"]}}</h3>
+                        </div>
+                        <div class="sign-up">
+						<input type="button" data-toggle="modal" data-dismiss="modal" ng-click="logout()" value="Log out"/>
+						</div>
+                      </div>
+                    </div>
+                  </div>
 	<div class="loading-spiner-holder" data-loading >
 		<i class="fa fa-spinner fa-spin" aria-hidden = "true"></i>
 	</div>
@@ -151,7 +161,8 @@
 	<div class="header" id="home1">
 		<div class="container">
 			<div class="w3l_login">
-				<a href="#" data-toggle="modal" data-target="#myModal88"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+				<a href="" data-toggle="modal" data-target="#myModal88" ng-if="!currentUser"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+				<a href="" data-toggle="modal" data-target="#loginSuccessModal" ng-if="currentUser"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
 			</div>
 			<div class="w3l_logo">
 				<h1><a href="#!/">Electronic Store<span>Your stores. Your place.</span></a></h1>
@@ -162,18 +173,18 @@
 				<div class="search_form">
 					<form action="#" method="post">
 						<input type="text" name="Search" placeholder="Search...">
-						<input type="submit" value="Send">
+						<input type="button" value="Send">
 					</form>
 				</div>
 			</div>
 			<div class="admin">
-				<a href="backend/"> Go to backend page</a>
+				<a href="backend/"> Back End </a>
 			</div>
 			<div class="cart cart box_1"> 
 				<form action="#" method="post" class="last"> 
 					<input type="hidden" name="cmd" value="_cart" />
 					<input type="hidden" name="display" value="1" />
-					<button class="w3view-cart" type="submit" name="submit" value=""><i class="fa fa-cart-arrow-down" aria-hidden="true"></i></button>
+					<button class="w3view-cart" name="submit" value=""><i class="fa fa-cart-arrow-down" aria-hidden="true"></i></button>
 				</form>   
 			</div>  
 		</div>
@@ -358,5 +369,76 @@
         });
     </script>  
 	<!-- //cart-js -->   
+	<div id="w3lssbmincart">
+		<form method="post" class="" target=""> 
+			<button type="button" class="sbmincart-closer">×</button>    
+			<ul ng-if="cartDetails.data">                
+				<!-- <li class="sbmincart-item sbmincart-item-changed">            
+					<div class="sbmincart-details-name">                
+						<a class="sbmincart-name" href="file:///D:/xampp/htdocs/electronic_store-web_Free30-01-2017_844071291/web/index.html">Mobile Phone1</a>                
+						<ul class="sbmincart-attributes">                                                                            </ul>           </div>            
+						<div class="sbmincart-details-quantity">               
+							<input class="sbmincart-quantity" data-sbmincart-idx="0" name="quantity_1" type="text" pattern="[0-9]*" value="1" autocomplete="off">            
+						</div>            
+						<div class="sbmincart-details-remove">                
+							<button type="button" class="sbmincart-remove" data-sbmincart-idx="0">×</button>           
+						</div>           
+						<div class="sbmincart-details-price">                
+							<span class="sbmincart-price">$350.00</span>           
+						</div>            
+						<input type="hidden" name="w3ls_item_1" value="Mobile Phone1">            
+						<input type="hidden" name="amount_1" value="350">            
+						<input type="hidden" name="shipping_1" value="undefined">            
+						<input type="hidden" name="shipping2_1" value="undefined">       
+					</li>           -->      
+					<li class="sbmincart-item" ng-repeat="(key, detail) in cartDetails.data">            
+						<div class="sbmincart-details-name">                
+							<a class="sbmincart-name" href="">{{detail.productName}}</a>               
+							<ul class="sbmincart-attributes">                                                                            </ul>    
+						</div>            
+						<div class="sbmincart-details-quantity">                
+							<input class="sbmincart-quantity" data-sbmincart-idx="1" name="quantity_2" type="text" pattern="[0-9]*" ng-model="detail.quantity" autocomplete="off" ng-blur="updateQuantityItem(detail.cartDetailId,detail.productPrice,detail.quantity)">           
+						</div>            
+						<div class="sbmincart-details-remove">                
+							<button type="button" class="sbmincart-remove" data-sbmincart-idx="1" ng-click="removeItemOfCart(detail.cartDetailId)">×</button>            
+						</div>            
+						<div class="sbmincart-details-price">                
+							<span class="sbmincart-price">${{detail.productPriceTotal}}</span>            
+						</div>            
+						<input type="hidden" name="w3ls_item_2" value="Mobile Phone2">           
+						<input type="hidden" name="amount_2" value="302">            
+						<input type="hidden" name="shipping_2" value="undefined">            
+						<input type="hidden" name="shipping2_2" value="undefined">        
+					</li>                
+						<!-- <li class="sbmincart-item">            
+							<div class="sbmincart-details-name">                
+								<a class="sbmincart-name" href="file:///D:/xampp/htdocs/electronic_store-web_Free30-01-2017_844071291/web/index.html">Mobile Phone3</a>              <ul class="sbmincart-attributes"></ul>            
+							</div>            
+							<div class="sbmincart-details-quantity">                
+								<input class="sbmincart-quantity" data-sbmincart-idx="2" name="quantity_3" type="text" pattern="[0-9]*" value="1" autocomplete="off">            
+							</div>            
+							<div class="sbmincart-details-remove">                
+								<button type="button" class="sbmincart-remove" data-sbmincart-idx="2">×</button>            </div>            
+								<div class="sbmincart-details-price">                
+									<span class="sbmincart-price">$245.00</span>            
+								</div>            
+								<input type="hidden" name="w3ls_item_3" value="Mobile Phone3">            
+								<input type="hidden" name="amount_3" value="245">            
+								<input type="hidden" name="shipping_3" value="undefined">            
+								<input type="hidden" name="shipping2_3" value="undefined">        
+							</li>         -->    
+						</ul>    
+								<div class="sbmincart-footer" ng-if="cartDetails.data">                    
+									<div class="sbmincart-subtotal">                Subtotal: ${{total}} USD            
+									</div>           
+									<a class="sbmincart-submit" href="#!/checkout">Check Out</a>            
+								</div>
+								<div class="sbmincart-footer" ng-if="!cartDetails.data">                    
+									<p class="sbmincart-empty-text">Your shopping cart is empty</p>            
+								</div>
+								<input type="hidden" name="cmd" value="_cart">    
+								<input type="hidden" name="upload" value="1">            
+								<input type="hidden" name="bn" value="sbmincart_AddToCart_WPS_US">    
+							</form></div>
 </body>
 </html>

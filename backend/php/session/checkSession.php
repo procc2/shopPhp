@@ -1,6 +1,9 @@
 <?php 
 	session_start();
 	if (isset($_SESSION["userSessionId"])) {
-		print("ok");
+		if($_SESSION["userSessionId"][3] <=4)
+		print("true");
+	}else{
+
 	}
  ?>

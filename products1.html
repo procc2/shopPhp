@@ -3,7 +3,7 @@
 	<div class="breadcrumb_dress">
 		<div class="container">
 			<ul>
-				<li><a href="index.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a> <i>/</i></li>
+				<li><a href="#!/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a> <i>/</i></li>
 				<li>Products1</li>
 			</ul>
 		</div>
@@ -131,15 +131,8 @@
 					<div class="w3ls_mobiles_grid_right_grid3">
 						<div class="col-md-4 agileinfo_new_products_grid agileinfo_new_products_grid_mobiles" ng-repeat="product in products.data">
 							<div class="agile_ecommerce_tab_left mobiles_grid" >
-								<div class="hs-wrapper hs-wrapper2">
-									<!-- <i ng-repeat="image in product.images.data">
-									<img ng-src="{{image.ImagePath}}" class="img-responsive">
-									</i> -->
+								<div class="hs-wrapper hs-wrapper2">									
 									<img ng-repeat="image in product.images.data" ng-src="{{image.ImagePath}}" class="img-responsive">
-									<!-- <img src="images/22.jpg" alt=" " class="img-responsive" />
-									<img src="images/23.jpg" alt=" " class="img-responsive" />
-									<img src="images/24.jpg" alt=" " class="img-responsive" />
-									<img src="images/25.jpg" alt=" " class="img-responsive" />  -->
 									<div class="w3_hs_bottom w3_hs_bottom_sub1">
 										<ul>
 											<li>
@@ -156,7 +149,7 @@
 										<input type="hidden" name="add" value="1" /> 
 										<input type="hidden" name="w3ls_item" value="Asus Laptop" /> 
 										<input type="hidden" name="amount" value="880.00"/>   
-										<button type="submit" class="w3ls-cart">Add to cart</button>
+										<button type="button" class="w3ls-cart" ng-click="addItemToCart(currentUser.userId,product.productId,product.productPrice)">Add to cart</button>
 									</form>
 								</div> 
 								<div class="mobiles_grid_pos">
@@ -917,28 +910,24 @@
 		</div>
 	</div>  
 	<!-- Related Products -->
-	<div class="w3l_related_products">
+	<div class="w3l_related_products" >
 		<div class="container">
 			<h3>Related Products</h3>
 			<ul id="flexisel">			
-				<li>
+				<li ng-repeat="(key, product) in recommendProducts.data">
 					<div class="w3l_related_products_grid">
 						<div class="agile_ecommerce_tab_left mobiles_grid">
 							<div class="hs-wrapper hs-wrapper3">
-								<img src="images/34.jpg" alt=" " class="img-responsive" />
-								<img src="images/35.jpg" alt=" " class="img-responsive" />
-								<img src="images/27.jpg" alt=" " class="img-responsive" />
-								<img src="images/28.jpg" alt=" " class="img-responsive" />
-								<img src="images/37.jpg" alt=" " class="img-responsive" /> 
+								<img ng-repeat="image in product.images.data" ng-src="{{image.ImagePath}}" alt=" " class="img-responsive" />
 								<div class="w3_hs_bottom">
 									<div class="flex_ecommerce">
-										<a href="#" data-toggle="modal" data-target="#myModal6"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
+										<a href="javascript:void(0)" data-toggle="modal" data-target="#myModal8" ng-click="getClickedModalProduct(product)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
 									</div>
 								</div>
 							</div>
-							<h5><a href="single.html">Kid's Toy</a></h5>
+							<h5><a href="#!/single" ng-click="setClickedProduct(product.productId)">{{product.productName}}</a></h5>
 							<div class="simpleCart_shelfItem"> 
-								<p class="flexisel_ecommerce_cart"><span>$150</span> <i class="item_price">$100</i></p>
+								<p class="flexisel_ecommerce_cart"><span>${{product.productPrice}}</span> <i class="item_price">${{product.productPrice -30/100*product.productPrice}}</i></p>
 								<form action="#" method="post">
 									<input type="hidden" name="cmd" value="_cart">
 									<input type="hidden" name="add" value="1"> 
@@ -950,7 +939,7 @@
 						</div>
 					</div>
 				</li>
-				<li>
+				<!-- <li>
 					<div class="w3l_related_products_grid">
 						<div class="agile_ecommerce_tab_left mobiles_grid">
 							<div class="hs-wrapper hs-wrapper3">
@@ -1039,7 +1028,7 @@
 							</div>
 						</div> 
 					</div>
-				</li>
+				</li> -->
 			</ul>
 				 <flex-carousel data-options="{
            					 visibleItems:4,

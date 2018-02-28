@@ -157,9 +157,7 @@ var admin = angular.module('admin', ["ngRoute","ngCookies"])
 					'color' : value[2],
 				});
 				
-			});
-			console.log($scope.imagePaths);
-			
+			});		
 		})
 	}
 	$scope.colors = ["Red","Gray","Blue","Gold","Black","Pink"];
@@ -356,7 +354,7 @@ var admin = angular.module('admin', ["ngRoute","ngCookies"])
 			.then(function(response) {
 				if(response.data.status == 1){
 					var uSId = response.data.data;
-					sessionService.set('user',uSId);
+					sessionService.set('user',JSON.stringify(uSId));
 					$location.path('/');
 					console.log(data.email);
 					$cookieStore.put('currentUser',data.email);
@@ -383,15 +381,15 @@ var admin = angular.module('admin', ["ngRoute","ngCookies"])
 	var routePermission = ['/']; // required login
 	$rootScope.$on('$routeChangeStart', function(){
 		console.log(routePermission.indexOf($location.path()));
-		if (routePermission.indexOf($location.path()) != -1 ) {
+		
 			var connected = loginService.isLogged()
 			.then(function(response){
-				console.log(response);
+				console.log(response.data);
 				if(!response.data)
 				$location.path('/login');
 			})
 			
-		}
+		
 	});
 
 })

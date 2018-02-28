@@ -1,18 +1,17 @@
 <?php 
-	require '../../../connect/dbConnect.php';
+	require '../dbConnect.php';
 	$qrUser = "Select * from user where 1 = 1 ";
 	$checkingData = json_decode(file_get_contents("php://input"),true);
 	if(!empty($checkingData["email"]) && !empty($checkingData["email"])){
 	$email = $checkingData["email"];
 	$pass = $checkingData["pass"];
-	$qrUser .= "and userEmail = '$email' and userPassword = '$pass' and Role<=4" ;
+	$qrUser .= "and userEmail = '$email' and userPassword = '$pass'" ;
 	$user = $mysqli->query($qrUser);
 	if(mysqli_num_rows($user) >0){
 		session_start();
 	while ($row_user = mysqli_fetch_array($user)) {
 		$data[] = $row_user;
 	}
-	// $_SESSION["userSessionId"] = uniqid('us_');
 	$_SESSION["userSessionId"] = $data[0];
 	$json = array('status' => 1 , 'data' => $_SESSION["userSessionId"]);
 	

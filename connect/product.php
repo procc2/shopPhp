@@ -32,11 +32,17 @@
 		# code...
 		$qrProduct .= "and product.productPrice <= ".$_GET["max"]." ";
 	}
-	$qrProduct.= " order by product.productId";
+	if (isset($_GET["random"])) {
+		$qrProduct .= "order by RAND() limit 4";
+	}
+	else if (isset($_GET["new"])) {
+		$qrProduct .= "order by insertDate desc limit 4";
+	}else $qrProduct.= " order by product.productId";
 	if (isset($_GET["limit"])) {
 		$qrProduct .= " limit ".$_GET["limit"]; 
 		
 	}
+	
 	$product = $mysqli->query($qrProduct);
 	while ($row_product = mysqli_fetch_array($product)) {
 		$data[] = $row_product;

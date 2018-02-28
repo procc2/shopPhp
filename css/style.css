@@ -1509,7 +1509,7 @@ div#horizontalTab ul {
 ::-webkit-input-placeholder{
 	color:#212121 !important;
 }
-.register input[type="submit"]{
+.register input[type="button"]{
 	outline:none;
 	border:none;
 	background:#212121;
@@ -1520,7 +1520,7 @@ div#horizontalTab ul {
 	text-transform:uppercase;
 	margin:2em 0 0;
 }
-.register input[type="submit"]:hover{
+.register input[type="button"]:hover{
 	background:#3c43a4;
 }
 div#OR {
@@ -3599,7 +3599,7 @@ td.invert-image a img {
 	h3.other-nw {
 		margin: 2em 0 2em;
 	}
-	.register input[type="submit"] {
+	.register input[type="button"] {
 		width: 50%;
 		font-size: 14px;
 	}
@@ -4798,7 +4798,7 @@ td.invert-image a img {
 	div#horizontalTab ul {
 		padding-bottom: 0.5em;
 	}
-	.register input[type="submit"] {
+	.register input[type="button"] {
 		width: 100%;
 		margin: 1em 0 0;
 	}
