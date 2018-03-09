@@ -4,7 +4,7 @@
 		<div class="container">
 			<ul>
 				<li><a href="#!/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a> <i>/</i></li>
-				<li>Check Out<i>/</i></li>
+				<li>Checkout<i>/</i></li>
 			</ul>
 		</div>
 	</div>
@@ -17,68 +17,43 @@
 			<!-- row -->
 			<div class="row">
 				<form id="checkout-form" class="clearfix">
-					<div class="col-md-6" ng-if="!currentUser">
+					<div class="col-md-6 " ng-show="!currentUser">
 						<div class="billing-details">
-							<p>Already a customer ? <a href="">Login</a></p>
+							<p>Already a customer ? <a href="" data-toggle="modal" data-target="#myModal88">Login</a></p>
 							<div class="section-title">
 								<h3 class="title">Billing Details</h3>
 							</div>
 							<div class="form-group">
-								<input class="input" type="text" name="first-name" placeholder="First Name">
+								<input class="input" type="text" name="first-name" placeholder="First Name" ng-model="userName">
 							</div>
 							<div class="form-group">
-								<input class="input" type="text" name="last-name" placeholder="Last Name">
+								<input class="input" type="text" name="address" placeholder="Address" ng-model="address">
 							</div>
 							<div class="form-group">
-								<input class="input" type="email" name="email" placeholder="Email">
+								<input class="input" type="tel" name="tel" placeholder="Telephone" ng-model="phone">
 							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="address" placeholder="Address">
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="city" placeholder="City">
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="country" placeholder="Country">
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="zip-code" placeholder="ZIP Code">
-							</div>
-							<div class="form-group">
-								<input class="input" type="tel" name="tel" placeholder="Telephone">
-							</div>
-							<div class="form-group">
-								<div class="input-checkbox">
-									<input type="checkbox" id="register">
-									<label class="font-weak" for="register">Create Account?</label>
-									<div class="caption">
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.
-											<p>
-												<input class="input" type="password" name="password" placeholder="Enter Your Password">
-									</div>
-								</div>
-							</div>
+							
 						</div>
 					</div>
-
-					<div class="col-md-6" >
+					
+					<div class="col-md-6 contact-left" >
 						<div class="shiping-methods">
 							<div class="section-title">
 								<h4 class="title">Shiping Methods</h4>
 							</div>
 							<div class="input-checkbox">
-								<input type="radio" name="shipping" id="shipping-1" checked>
-								<label for="shipping-1">Free Shiping -  $0.00</label>
+								<input type="radio" ng-model="shipping" name="shipping" id="shipping-1" value="FreeShip">
+								<label>Free Shipping -  $0.00</label>
 								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+									<p>
 										<p>
 								</div>
 							</div>
 							<div class="input-checkbox">
-								<input type="radio" name="shipping" id="shipping-2">
-								<label for="shipping-2">Standard - $4.00</label>
+								<input type="radio" ng-model="shipping" name="shipping" id="shipping-2" value="Standard">
+								<label>Standard - $4.00</label>
 								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+									<p>
 										<p>
 								</div>
 							</div>
@@ -89,26 +64,26 @@
 								<h4 class="title">Payments Methods</h4>
 							</div>
 							<div class="input-checkbox">
-								<input type="radio" name="payments" id="payments-1" checked>
-								<label for="payments-1">Direct Bank Transfer</label>
+								<input type="radio" ng-model = "payments" name="payments" id="payments-1" value="banking" >
+								<label>Direct Bank Transfer</label>
 								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+									<p>
 										<p>
 								</div>
 							</div>
 							<div class="input-checkbox">
-								<input type="radio" name="payments" id="payments-2">
-								<label for="payments-2">Cheque Payment</label>
+								<input type="radio" ng-model = "payments" name="payments" id="payments-2" value="Cheque">
+								<label>Cheque Payment</label>
 								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+									<p>
 										<p>
 								</div>
 							</div>
 							<div class="input-checkbox">
-								<input type="radio" name="payments" id="payments-3">
-								<label for="payments-3">Paypal System</label>
+								<input type="radio" ng-model = "payments" name="payments" id="payments-3" value="paypal">
+								<label>Paypal System</label>
 								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+									<p>
 										<p>
 								</div>
 							</div>
@@ -133,7 +108,7 @@
 								</thead>
 								<tbody>
 									<tr ng-repeat="(key, detail) in cartDetails.data">
-										<td class="thumb"><img src="./img/thumb-product01.jpg" alt=""></td>
+										<td class="thumb"  style="width: 20%"><img ng-src="{{detail.images.data[0].ImagePath}}" alt="" style="width: 60%"></td>{{detail.images.data[0]}}
 										<td class="details">
 											<a href="#">{{detail.productName}}</a>
 											<ul>
@@ -142,9 +117,9 @@
 											</ul>
 										</td>
 										<td class="price text-center"><strong>${{detail.productPrice}}</strong><br><del class="font-weak"><small>${{detail.productPrice -(-30/100 * detail.productPrice)}}</small></del></td>
-										<td class="qty text-center"><input class="input" ng-blur="updateQuantityItem(detail.cartDetailId,detail.productPrice,detail.quantity)" ng-model="detail.quantity" ></td>
+										<td class="qty text-center"><input class="input" ng-blur="updateQuantityItem(detail.cartDetailId,detail.productPrice,detail.quantity,detail.productId)" ng-model="detail.quantity" ></td>
 										<td class="total text-center"><strong class="primary-color">${{detail.productPriceTotal}}</strong></td>
-										<td class="text-right"><button class="main-btn icon-btn" ng-click="removeItemOfCart(detail.cartDetailId)"><i class="fa fa-close"></i></button></td>
+										<td class="text-right"><button class="main-btn icon-btn" ng-click="removeItemOfCart(detail.cartDetailId,detail.productId)"><i class="fa fa-close"></i></button></td>
 									</tr>
 									<!-- <tr>
 										<td class="thumb"><img src="./img/thumb-product01.jpg" alt=""></td>
@@ -184,7 +159,7 @@
 									<tr>
 										<th class="empty" colspan="3"></th>
 										<th>SHIPING</th>
-										<td colspan="2">Free Shipping</td>
+										<td colspan="2">{{shipping}}</td>
 									</tr>
 									<tr>
 										<th class="empty" colspan="3"></th>
@@ -194,7 +169,8 @@
 								</tfoot>
 							</table>
 							<div class="pull-right">
-								<button class="primary-btn" ng-click="insertNewBill(currentUser.userId,total)" data-toggle="modal" data-target="#successModal">Place Order</button>
+								<button class="btn-primary" style="padding: .5em 1.5em;" ng-click="insertNewBill(currentUser,total)" >Place Order</button>
+								<!-- data-toggle="modal" data-target="#myModal" -->
 							</div>
 						</div>
 
@@ -215,10 +191,50 @@
 				<h4 class="modal-title">Awesome!</h4>	
 			</div>
 			<div class="modal-body">
-				<p class="text-center">Your booking has been confirmed. Check your email for detials.</p>
+				<p class="text-center">Your bill has been confirmed. Check your email for detials.</p>
 			</div>
 			<div class="modal-footer">
 				<button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="myModal" class="modal" style="display: none;">
+	<div class="modal-dialog modal-confirm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div style="background: #47c9a2;
+    border-bottom: none;
+    position: relative;
+    text-align: center;
+    margin: -10px -16px 0;
+    border-radius: 5px 5px 0 0;
+    padding: 35px;">
+					<i class="fa fa-chevron-circle-down" style="font-size: 64px;
+    margin: -4px 0 0 -4px;color: white;"></i>
+				</div>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="position: absolute;
+		top: 0px;
+		right: 17px;
+		color: #3d3879;
+		text-shadow: none;
+		opacity: 0.5;">×</button>
+			</div>
+			<div class="modal-body text-center">
+				<h4 style="text-align: center;
+    font-size: 36px;
+    margin: 10px 0;">Great!</h4>
+				<p>Your bill has been created successfully.</p>
+				<button class="btn btn-success" data-dismiss="modal" onclick="$('#myModal').modal('hide'); $('.modal-backdrop').remove(); location.href = '#!/product';"  style=" color: #fff;
+        border-radius: 4px;
+		background: #eeb711;
+		text-decoration: none;
+		transition: all 0.4s;
+        line-height: normal;
+		border-radius: 30px;
+		margin-top: 10px;
+		padding: 6px 20px;
+        border: none;"><span>Shop more</span> <i class="fa fa-arrow-right"></i></button>
 			</div>
 		</div>
 	</div>

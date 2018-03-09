@@ -1,5 +1,5 @@
 "use strict";
-var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
+var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootstrap"])
 .directive('loading',   ['$http' ,function ($http)
     {
         return {
@@ -43,16 +43,23 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 .factory('ProductService', function(){
 	var categoryId;
 	var setClickedCategory = function(data) {
-		
 		categoryId = data;
 	}
 	var getClickedCategory = function(){
-		
 		return categoryId;
+	}
+	var searchText;
+	var sendSearchText = function(data) {
+		searchText = data;
+	}
+	var getSearchText = function(){
+		return searchText;
 	}
 	return {
 		setClickedCategory : setClickedCategory,
-		getClickedCategory : getClickedCategory
+		getClickedCategory : getClickedCategory,
+		sendSearchText 	   : sendSearchText,
+		getSearchText      : getSearchText
 	};
 })
 .factory('SingleService',function(){
@@ -68,19 +75,112 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 		getProductDetail : getProductDetail
 	};
 })
+.factory('CartService', function(){
+	var cart = [];
+	function init(){
+		if(localStorage.getItem('cart')){
+			cart = JSON.parse(localStorage.getItem('cart'));
 
-.controller('MainController', function($rootScope,$http,ProductService,$scope,SingleService,loginService){
+		}
+	}
+	init();
+	function getAll(){
+		return cart;
+	}
+	function addItem(product){
+		debugger;
+		var check  = true;
+		angular.forEach(cart, function(value, key){
+			if (value.productName == product.productName) {
+				value.quantity +=1;
+				value.productPriceTotal = value.quantity * value.productPrice;
+				check = false;
+			}
+		});
+		if (check) {
+			product.quantity = 1;
+			product.productPriceTotal = product.quantity * product.productPrice;
+			cart.push(product);
+		}
+		localStorage.setItem('cart',JSON.stringify(cart));
+	}
+	function addItemHasQuantity(product){
+		debugger;
+		var check  = true;
+		angular.forEach(cart, function(value, key){
+			if (value.productName == product.productName) {
+				value.quantity += product.quantityNumber;
+				value.productPriceTotal = value.quantity * value.productPrice;
+				check = false;
+			}
+		});
+		if (check) {
+			product.quantity = product.quantityNumber;
+			product.productPriceTotal = product.quantity * product.productPrice;
+			cart.push(product);
+		}
+		localStorage.setItem('cart',JSON.stringify(cart));
+	}
+	function updateQuantityItem(productId,quantity){
+		angular.forEach(cart, function(value, key){
+			if (value.productId == productId) {
+				value.quantity = quantity;
+				value.productPriceTotal = value.quantity * value.productPrice;
+			}
+		});
+		localStorage.setItem('cart',JSON.stringify(cart));
+	}
+	function removeItem(productId){
+		angular.forEach(cart, function(value, key){
+			if (value.productId == productId) {
+				cart.splice(key,1);
+				console.log(cart);
+			}
+		});
+		localStorage.setItem('cart',JSON.stringify(cart));
+	}
+	function deleteAllItem(){
+		cart = [];
+		localStorage.clear();
+	}
+	return{
+		getAll : getAll,
+		addItem : addItem,
+		deleteAllItem : deleteAllItem,
+		removeItem : removeItem,
+		updateQuantityItem : updateQuantityItem,
+		addItemHasQuantity : addItemHasQuantity
+	};
+})
+.controller('MainController', function($rootScope,$http,ProductService,$scope,SingleService,loginService,CartService){
 	$rootScope.title = "Homepage";
 	// Click to product view 
 	$http.get("connect/category.php")
     .then(function (response) {
     	$rootScope.categories = response.data;
     });
+    $http.get("connect/facturer.php?limit=4")
+    .then(function (response) {
+    	console.log(response);
+    	$rootScope.topbrands = response.data;
+    });
+    $scope.getAllProduct = function(){
+    	$http.get("connect/product.php")
+    	.then(function(response){
+    	console.log(response);
+    	$scope.allProducts = response.data;
+    });
+    }
+    $scope.getAllProduct();
+    // Search function
+    $scope.sendSearchText = function(text){
+    	ProductService.sendSearchText(text);
+    }
     // When redirect to product view 
 	$scope.setClickedCategory = function(categoryId){
     	ProductService.setClickedCategory(categoryId);
 	};
-	$scope.getProductByCategoryId = function(categoryId){
+	$scope.getProductByCategoryIdLimit = function(categoryId){
 		$http.get("connect/product.php?categoryId="+categoryId + "&limit=" + 3)
 	    .then(function(productCategoryData){
 	    	$scope.products = productCategoryData.data;
@@ -91,8 +191,19 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 			console.log(error);
 		});
 	};
+	$scope.getProductByFacturerId= function(facturerId){
+		$http.get("connect/product.php?facturerId="+facturerId)
+	    .then(function(productFacturerId){
+	    	$scope.products = productFacturerId.data;
+	    	angular.forEach(productFacturerId.data.data, function(value, key){
+				$scope.getProductImage(value);
+			});
+	    },function(error){
+			console.log(error);
+		});
+	};
 	// Auto find mobile first
-	$scope.getProductByCategoryId(3);
+	$scope.getProductByCategoryIdLimit(3);
 	$scope.getProductImage = function(product){
 
 		$http.get("connect/productImage.php?productId=" +product.productId)
@@ -125,24 +236,49 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 		$scope.clickedProduct = product;
 		$scope.getProductImage(product);
 	}
+	//Register popup
+	$rootScope.register = function(){
+		$http.post('backend/php/user/insertNewUser.php', {
+			'uName' : $scope.name,
+			'uEmail' : $scope.email,
+			'uPhone' : $scope.phone,
+			'uAddress' : $scope.address,
+			'uPass' : $scope.pw
+		}).then(function(response){
+			console.log(response);
+			$rootScope.login($scope.email,$scope.pw);
+		})
+	}
 	//Login popup
-	$rootScope.login = function () {
+	$rootScope.login = function (email,pass) {
 		var user = {};
-		user.email = $scope.email;
-		user.pass = $scope.pass;
+		user.email = email;
+		user.pass = pass;
+		console.log(user);
 		loginService.login(user,$scope).then(function(response){
 			$rootScope.currentUser = response;
 			$rootScope.getCartDetail(response.userId);
 		});
 		$scope.email="";
 		$scope.pass ="";
-		
+		//Delete all session cart data
+		CartService.deleteAllItem();
 	}
+	//Get total of cart
+	$scope.getTotal = function(){
+		var total = 0 ; 
+		for(var i =0 ;i< $scope.cartDetails.data.length ;i++){
+			total += parseInt($scope.cartDetails.data[i].productPriceTotal);
+
+		}
+		return total;
+	}
+
 	//Get detail current Cart
 	$rootScope.getCartDetail = function(id){
 		$http.get('connect/cartDetail.php?cartId=' + id)
 		.then(function(response){
-			console.log(response);
+			//console.log(response);
 			$rootScope.cartDetails = response.data;
 			if($rootScope.cartDetails.data)
 			$rootScope.total = $scope.getTotal();
@@ -156,6 +292,11 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 		$rootScope.currentUser = loginService.getCurrenSession();
 		console.log($rootScope.currentUser);
 		$rootScope.getCartDetail($rootScope.currentUser.userId)
+	}else{
+		$rootScope.cartDetails = {};
+		$rootScope.cartDetails.data=CartService.getAll();
+		console.log($rootScope.cartDetails.data);
+		$rootScope.total = $scope.getTotal();
 	}
 	}
 	
@@ -167,26 +308,44 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 		delete $scope.currentUser;
 		delete $rootScope.cartDetails;
 		delete $rootScope.total;
+		//Return to session cart if not login
+		$rootScope.getSessionUser();
 	}
 	//add item to cart with session
-	$scope.addItemToCart = function(userId,productId,price){
+	$scope.addItemToCart = function(userId,product){
+		if ($rootScope.currentUser) {
 		$http.post('connect/userCart/insertCartDetail.php',{
 			'userId' : userId,
-			'productId' : productId,
-			'price' : price,
+			'productId' : product.productId,
+			'price' : product.productPrice,
+			'quantity' : product.quantityNumber
 		}).then(function(response){
 			console.log(response);
+			if($rootScope.currentUser)
 			$scope.getCartDetail($rootScope.currentUser.userId);
-		})
-
+		});
+	}else{
+		if(product.quantityNumber){
+			CartService.addItemHasQuantity(product);
+		}else
+		CartService.addItem(product);
+		$rootScope.total = $scope.getTotal();
+		}
 	}
-	$scope.removeItemOfCart = function(id){
+	$scope.removeItemOfCart = function(id,productId){
+		if($rootScope.currentUser){
 		$http.get('connect/userCart/removeCartDetail.php?id=' + id)
 		.then(function(response){
 			$scope.getCartDetail($rootScope.currentUser.userId);
 		})
+		}else{
+			CartService.removeItem(productId);
+			$rootScope.total = $scope.getTotal();
+
+		}
 	}
-	$scope.updateQuantityItem = function(detailId,price,quantity){
+	$scope.updateQuantityItem = function(detailId,price,quantity,productId){
+		if($rootScope.currentUser){
 		console.log(detailId);
 		$http.post('connect/userCart/updateCartDetail.php',{
 			'quantity' : quantity,
@@ -196,6 +355,9 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 			console.log(response);
 			$scope.getCartDetail($rootScope.currentUser.userId);
 		})
+		}else{
+			CartService.updateQuantityItem(productId,quantity);
+		}
 	}
 	$scope.getTotal = function(){
 		var total = 0 ; 
@@ -235,21 +397,54 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 	$rootScope.title = "Product";
 	$http.get("connect/category.php")
     .then(function (response) {
-    	console.log(response);
     	$rootScope.categories = response.data;
-    	
-    	
     });
     $http.get("connect/facturer.php")
     .then(function (response) {
     	$rootScope.facturers = response.data;
-    	
-    	
     });
     $http.get("connect/product.php")
     .then(function(response){
     	console.log(response);
     	$scope.products = response.data;
+    	$scope.productNumber = response.data.quantity;
+    	setPagingData($scope.currentPage);
+    	// another view call 
+    	if(ProductService.getClickedCategory()){
+    		$scope.getProductByCategoryId(ProductService.getClickedCategory());
+    	}
+    	else if(ProductService.getSearchText()){
+    		$scope.getProductByName(ProductService.getSearchText());
+    	}
+    	else{
+    	angular.forEach(response.data.data, function(value, key){
+				$scope.getProductImage(value);
+		});
+    	}
+    });
+    $scope.currentPage = 1;
+    function setPagingData(page) {
+    $scope.currentPage = page;
+    	if($scope.products.status == 1){
+    		console.log($scope.products);
+    		var pagedData = $scope.products.data.slice((page - 1) * 9, page * 9);
+    		$scope.productsLimit = pagedData;
+    		console.log(pagedData);
+		}else{
+			delete $scope.productsLimit 
+		}
+  	}
+  	$scope.$watch('currentPage', function() {
+  	
+    setPagingData($scope.currentPage);
+  	});
+   	$rootScope.getProductByName = function(name){
+   		$http.get("connect/product.php?productName="+name)
+    	.then(function(response){
+    	console.log(response);
+    	$scope.products = response.data;
+    	$scope.productNumber = response.data.quantity;
+    	setPagingData($scope.currentPage);
     	// another view call 
     	if(ProductService.getClickedCategory()){
     		$scope.getProductByCategoryId(ProductService.getClickedCategory());
@@ -260,11 +455,14 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 		});
     	}
     });
-    $scope.getProductByCategoryId = function(categoryId){
+   	}
+    $rootScope.getProductByCategoryId = function(categoryId){
 		$http.get("connect/product.php?categoryId="+categoryId)
 	    .then(function(productCategoryData){
-	    	$scope.products = productCategoryData.data;
 	    	console.log(productCategoryData);
+	    	$scope.productNumber = productCategoryData.data.quantity;
+	    	$scope.products = productCategoryData.data;
+	    	setPagingData($scope.currentPage);
 	    	angular.forEach(productCategoryData.data.data, function(value, key){
 				$scope.getProductImage(value);
 			});
@@ -272,13 +470,16 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 			console.log(error);
 		});
 	};
+	//redirect to product view
 	$rootScope.setClickedCategory = function(categoryId){
-    	$scope.getProductByCategoryId(categoryId);
+    	$rootScope.getProductByCategoryId(categoryId);
 	};
 	$rootScope.getProductByFacturerId= function(facturerId){
 		$http.get("connect/product.php?facturerId="+facturerId)
 	    .then(function(productFacturerId){
 	    	$scope.products = productFacturerId.data;
+	    	$scope.productNumber = productFacturerId.data.quantity;
+	    	setPagingData($scope.currentPage);
 	    	angular.forEach(productFacturerId.data.data, function(value, key){
 				$scope.getProductImage(value);
 			});
@@ -290,6 +491,8 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 		$http.get("connect/product.php?max=" + price)
 		.then(function(productLower){
 			$scope.products = productLower.data;
+			$scope.productNumber = productLower.data.quantity;
+			setPagingData($scope.currentPage);
 			angular.forEach(productLower.data.data, function(value, key){
 				$scope.getProductImage(value);
 			});
@@ -301,6 +504,8 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 		$http.get("connect/product.php?min="+min+"&max=" +max)
 		.then(function(productPriceBetween){
 			$scope.products = productPriceBetween.data;
+			$scope.productNumber = productPriceBetween.data.quantity;
+			setPagingData($scope.currentPage);
 			angular.forEach(productPriceBetween.data.data, function(value, key){
 				$scope.getProductImage(value);
 			});
@@ -312,6 +517,8 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 		$http.get("connect/product.php?min=" + price)
 		.then(function(productHigher){
 			$scope.products = productHigher.data;
+			$scope.productNumber = productHigher.data.quantity;
+			setPagingData($scope.currentPage);
 			angular.forEach(productHigher.data.data, function(value, key){
 				$scope.getProductImage(value);
 			});
@@ -322,11 +529,11 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 	$scope.getProductByColor = function(color){
 		$http.get("connect/product.php?color=" + color)
 		.then(function(productHasColor){
-			console.log(productHasColor);
 			$scope.products = productHasColor.data;
+			$scope.productNumber = productHasColor.data.quantity;
+			setPagingData($scope.currentPage);
 			angular.forEach(productHasColor.data.data, function(value, key){
 				$scope.getProductImage(value);
-				console.log(value);
 			});
 		},function(error){
 			console.log(error);
@@ -352,11 +559,10 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 	$scope.getRandomProduct = function(){
 		$http.get("connect/product.php?random")
 		.then(function(randomProducts){
-			console.log(randomProducts);
 			$scope.recommendProducts = randomProducts.data;
 			angular.forEach(randomProducts.data.data, function(value, key){
 				$scope.getProductImage(value);
-				console.log(value);
+				
 			});
 		},function(error){
 			console.log(error);
@@ -366,25 +572,26 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 
 
 })
-.controller('SingleCtrl', function($rootScope,$http,$scope,SingleService){
+.controller('SingleCtrl', function($rootScope,$http,$scope,SingleService,CartService){
 	$rootScope.title = "SinglePage";
 	$scope.getProductById = function(id){
     	$http.get("connect/product.php?productId="+id)
 	    .then(function(product){
-	    	
+	    	$scope.slides = [];
 	    	$scope.product = product.data.data[0];
+	    	$scope.product.quantityNumber = 1;
 	    	$rootScope.title = product.data.data[0]["productName"];
 			$scope.getProductImage(product.data.data[0]);
-			console.log($scope.product);
+			if(!$scope.relatedProducts)
+			$scope.getRelatedProduct($scope.product.CategoryId);
 	    },function(error){
 			console.log(error);
-		});
-		
+		});	
     }
     if(SingleService.getProductDetail()){
 	$scope.getProductById(SingleService.getProductDetail());
 	}	
-	$scope.slides = [];
+	
     $scope.getProductImage = function(product){
 		$http.get("connect/productImage.php?productId=" +product.productId)
 		.then(function(response){
@@ -397,19 +604,66 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 		});
 		
 	}
+	$scope.getRelatedProduct = function(categoryId){
+		$http.get("connect/product.php?categoryId="+categoryId +"&random")
+		.then(function(relatedProducts){
+			console.log(relatedProducts);
+			$scope.relatedProducts = relatedProducts.data;
+			angular.forEach(relatedProducts.data.data, function(value, key){
+				$scope.getProductImageForRelated(value);
+				
+			});
+		},function(error){
+			console.log(error);
+		})
+	};
+	$scope.getProductImageForRelated = function(product){
+
+		$http.get("connect/productImage.php?productId=" +product.productId)
+		.then(function(response){
+			product.images = response.data;		
+		});
+		
+	}
+	$scope.quantityPlus = function(){
+		$scope.product.quantityNumber ++;
+	}
+	$scope.quantityMinus = function(){
+		$scope.product.quantityNumber --;
+	}
+	
 })
-.controller('CheckOutController', function($rootScope,$http,$scope){
-	$rootScope.title = "Check Out";
-	$scope.insertNewBill = function(userId,total){
+.controller('CheckOutController', function($rootScope,$http,$scope,CartService){
+	$rootScope.title = "Checkout";
+	$scope.shipping = "FreeShip";
+	$scope.payments = 'banking';
+	$scope.insertNewBill = function(user,total){
+		if(!user){
+			user={};
+			user.userName = $scope.userName;
+			user.address = $scope.address;
+			user.phoneNumber = $scope.phone;
+		}
+
 		$http.post('connect/bill/insertNewBill.php', {
-			'userId' : userId,
-			'total' : total
+			'userId' : user.userId,
+			'userName' : user.userName,
+			'phoneNumber' : user.phoneNumber,
+			'address' : user.address,
+			'total' : total,
+			'payment' : $scope.payments
 		}).then(function(response){
+			console.log(response);
 			var insertedId = response.data;
+			if(insertedId)
 			angular.forEach($rootScope.cartDetails.data, function(detail, key){
 				$scope.insertBillDetail(insertedId,detail.productId,detail.productPrice,detail.quantity,detail.cartDetailId);
 			});
+		//when success show modal
+		var myModal = angular.element( document.querySelector( '#myModal' ) );
+		myModal.modal("show");
 		})
+		
 	}
 	$scope.insertBillDetail = function(billId,productId,price,quantity,detailId){
 		$http.post('connect/bill/insertBillDetail.php',{
@@ -419,9 +673,10 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider"])
 			'quantity' : quantity
 		}).then(function(response){
 			//delete item after add to bill 
-			$scope.removeItemOfCart(detailId);
+			$scope.removeItemOfCart(detailId,productId);
 		})
 	}
+
 })
 .controller('MailController', function($rootScope){
 	$rootScope.title = "Mail";

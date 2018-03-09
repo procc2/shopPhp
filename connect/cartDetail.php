@@ -1,6 +1,6 @@
 <?php 
 	require 'dbConnect.php';
-	$qrCartDetail = "Select * from cartDetail,product,user where 1 = 1 and cartDetail.productId = product.productId  and cartDetail.userId = user.userId " ;
+	$qrCartDetail = "Select * from cartdetail,product,user where 1 = 1 and cartdetail.productId = product.productId  and cartdetail.userId = user.userId " ;
 	if (isset($_GET["cartId"])) {
 		$qrCartDetail .= "and user.userId =".$_GET["cartId"];
 	}

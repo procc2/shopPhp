@@ -1,9 +1,3 @@
-/*--
-Author: W3layouts
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
---*/
 html, body{
     font-size: 100%;
 	background:	#fff;
@@ -100,7 +94,7 @@ label.icon-search {
 	-webkit-transition:all 0.3s ease-out;
 }
 .search_form input[type='text']{
-	width: 380px;
+	width: 359px;
     padding: 10px;
     outline: none;
     font-size: 14px;
@@ -111,7 +105,7 @@ label.icon-search {
 .search_form input[type='text']::-webkit-input-placeholder{
 	color:#fff !important;
 }
-.search_form input[type='submit']{
+.search_form input[type='button']{
     outline: none;
     background: none;
     display: inline-block;
@@ -121,7 +115,7 @@ label.icon-search {
     text-transform: uppercase;
     padding: 10px 28px;
 }
-.search_form input[type='submit']:hover{
+.search_form input[type='button']:hover{
 	background:#fff;
 	border:1px solid #fff;
 	color:#212121;
@@ -910,14 +904,17 @@ z-index:999;
 	-o-border-radius: 25px;
 	-ms-border-radius: 25px;
 }
-.color-quality ul li a.brown span {
+.color-quality ul li a.blue span {
     background: #00008c;
 }
-.color-quality ul li a.purple span {
-    background: #840084;
+.color-quality ul li a.gold span {
+    background: yellow;
 }
 .color-quality ul li a.gray span {
-    background: #ff00ff;
+    background: gray;
+}
+.color-quality ul li a.black span {
+    background: black;
 }
 /*-- //banner-bottom --*/
 /*-- special-deals --*/
@@ -1500,7 +1497,7 @@ h2.resp-accordion {
 	width:100%;
 	font-size:14px;
 }
-.register input[type="password"],.register input[type="email"]{
+.register input[type="password"],.register input[type="email"],.register input[name="phone"]{
 	margin:1em 0 0;
 }
 div#horizontalTab ul {
@@ -1542,6 +1539,38 @@ h3.other-nw {
     color: #212121;
     text-align: right;
     margin:1em 0 4em;
+}
+/*section*/
+.section-title {
+  position: relative;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  border-bottom: 1px solid #DADADA;
+}
+.section-title .title {
+  display: inline-block;
+}
+
+.section-title:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1.5px;
+  height: 3px;
+  width: 60px;
+  background-color: #3c43a4;
+}
+.billing-details input{
+  width: 100%;
+  height: 40px;
+  padding: 0px 15px;
+  border: none;
+  background-color: transparent;
+  -webkit-box-shadow: 0px 0px 0px 1px #DADADA inset, 0px 0px 0px 5px transparent;
+  box-shadow: 0px 0px 0px 1px #DADADA inset, 0px 0px 0px 5px transparent;
+  -webkit-transition: 0.3s all;
+  transition: 0.3s all;
+
 }
 /* ---------- SOCIAL ---------- */
 

@@ -1,6 +1,9 @@
 <?php 
 	require 'dbConnect.php';
-	$qrBillDetail = "Select * from billDetail,bill,product where 1 = 1 and bill.billId = billDetail.billId and product.productId = billDetail.productId";
+	$qrBillDetail = "Select * from billdetail,bill,product where 1 = 1 and bill.billId = billDetail.billId and product.productId = billDetail.productId ";
+	if (isset($_GET["billId"])) {
+		$qrBillDetail .= "and billdetail.billId =".$_GET["billId"];
+	}
 	$billDetail = $mysqli->query($qrBillDetail) or die("Error ".mysqli_error());
 	while ($row_billDetail = mysqli_fetch_array($billDetail)) {
 		$data[] = $row_billDetail;

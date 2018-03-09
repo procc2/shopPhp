@@ -32,22 +32,28 @@
 		# code...
 		$qrProduct .= "and product.productPrice <= ".$_GET["max"]." ";
 	}
+	if (isset($_GET["productName"])) {
+		$qrProduct .= " and product.productName like '%".$_GET["productName"]."%'";
+	}
 	if (isset($_GET["random"])) {
 		$qrProduct .= "order by RAND() limit 4";
 	}
 	else if (isset($_GET["new"])) {
 		$qrProduct .= "order by insertDate desc limit 4";
 	}else $qrProduct.= " order by product.productId";
+	
 	if (isset($_GET["limit"])) {
 		$qrProduct .= " limit ".$_GET["limit"]; 
-		
 	}
-	
-	$product = $mysqli->query($qrProduct);
+	$product = $mysqli->query($qrProduct) or die("Failed ".$mysqli->error);
+	if(mysqli_num_rows($product) >0){
 	while ($row_product = mysqli_fetch_array($product)) {
 		$data[] = $row_product;
 	}
-	$json = array('status' => 1 , 'data' => $data);
+	$json = array('status' => 1 , 'data' => $data,'quantity' => $product->num_rows);
+	}else{
+		$json = array('status' => 0 , 'msg' => 'No Record Found!');
+	}
 	@mysqli_close();
 	echo json_encode($json);
  ?>

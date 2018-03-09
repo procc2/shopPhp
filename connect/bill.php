@@ -1,6 +1,7 @@
 <?php 
 	require 'dbConnect.php';
-	$qrBill = "Select * from bill,user where 1 = 1 and bill.userId = user.userId ";
+	$qrBill = "Select * from bill left join user on bill.userId = user.userId "
+			."where 1 = 1 ";
 	if(isset($_GET["userId"])){
 		$qrBill .= "and user.userId = ".$_GET["userId"];
 	}

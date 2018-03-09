@@ -304,10 +304,12 @@ var admin = angular.module('admin', ["ngRoute","ngCookies"])
 	$rootScope.title = "Bill and Cart";
 	$http.get('../connect/bill.php')
 	.then(function(response){
+		console.log(response);
 		$scope.bills = response.data;
 	});
 	$http.get('../connect/billDetail.php')
 	.then(function(response1){
+		console.log(response1);
 		$scope.billDetails = response1.data;
 	});
 	$http.get('../connect/cart.php')
@@ -319,6 +321,12 @@ var admin = angular.module('admin', ["ngRoute","ngCookies"])
 		console.log(response3);
 		$scope.cartDetails = response3.data
 	});
+	$scope.getBillDetailById = function(billId){
+		$http.get('../connect/billDetail.php?billId='+billId)
+		.then(function(response){
+			$scope.billDetails = response.data;
+		})
+	}
 })
 .controller('LoginController', function($rootScope,loginService,$scope){
 	$rootScope.title = "Login";

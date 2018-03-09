@@ -30,10 +30,6 @@
 								  <div class="panel-body panel_text">
 									<ul>
 										<li ng-repeat="category in categories.data"><a href="" ng-click ="getProductByCategoryId(category.CategoryId)">{{category.CategoryName}}</a></li>
-										<!-- <li><a href="products1.html">Laptop</a></li>
-										<li><a href="products2.html">Tv</a></li>
-										<li><a href="products.html">Wearables</a></li>
-										<li><a href="products2.html">Refrigerator</a></li> -->
 									</ul>
 								  </div>
 								</div>
@@ -129,7 +125,7 @@
 						<div class="clearfix"> </div>
 					</div>
 					<div class="w3ls_mobiles_grid_right_grid3">
-						<div class="col-md-4 agileinfo_new_products_grid agileinfo_new_products_grid_mobiles" ng-repeat="product in products.data">
+						<div class="col-md-4 agileinfo_new_products_grid agileinfo_new_products_grid_mobiles" ng-repeat="product in productsLimit | limitTo:9">
 							<div class="agile_ecommerce_tab_left mobiles_grid" >
 								<div class="hs-wrapper hs-wrapper2">									
 									<img ng-repeat="image in product.images.data" ng-src="{{image.ImagePath}}" class="img-responsive">
@@ -149,7 +145,7 @@
 										<input type="hidden" name="add" value="1" /> 
 										<input type="hidden" name="w3ls_item" value="Asus Laptop" /> 
 										<input type="hidden" name="amount" value="880.00"/>   
-										<button type="button" class="w3ls-cart" ng-click="addItemToCart(currentUser.userId,product.productId,product.productPrice)">Add to cart</button>
+										<button type="button" class="w3ls-cart" ng-click="addItemToCart(currentUser.userId,product)">Add to cart</button>
 									</form>
 								</div> 
 								<div class="mobiles_grid_pos">
@@ -157,254 +153,15 @@
 								</div>
 							</div>
 						</div>
-						<!-- <div class="col-md-4 agileinfo_new_products_grid agileinfo_new_products_grid_mobiles">
-							<div class="agile_ecommerce_tab_left mobiles_grid">
-								<div class="hs-wrapper hs-wrapper2"> 
-									<img src="images/p8.jpg" alt=" " class="img-responsive" />
-									<img src="images/p9.jpg" alt=" " class="img-responsive" />
-									<img src="images/p10.jpg" alt=" " class="img-responsive" />
-									<img src="images/p9.jpg" alt=" " class="img-responsive" />
-									<img src="images/p8.jpg" alt=" " class="img-responsive" /> 
-									<div class="w3_hs_bottom w3_hs_bottom_sub1">
-										<ul>
-											<li>
-												<a href="#" data-toggle="modal" data-target="#myModal7"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<h5><a href="single.html">Digital Watch</a></h5>
-								<div class="simpleCart_shelfItem">
-									<p><span>$30</span> <i class="item_price">$25</i></p>
-									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart" />
-										<input type="hidden" name="add" value="1" /> 
-										<input type="hidden" name="w3ls_item" value="Digital Watch" /> 
-										<input type="hidden" name="amount" value="25.00"/>   
-										<button type="submit" class="w3ls-cart">Add to cart</button>
-									</form>
-								</div> 
-							</div>
-						</div> -->
-						<!-- <div class="col-md-4 agileinfo_new_products_grid agileinfo_new_products_grid_mobiles">
-							<div class="agile_ecommerce_tab_left mobiles_grid">
-								<div class="hs-wrapper hs-wrapper2">
-									<img src="images/22.jpg" alt=" " class="img-responsive" />
-									<img src="images/23.jpg" alt=" " class="img-responsive" />
-									<img src="images/24.jpg" alt=" " class="img-responsive" />
-									<img src="images/25.jpg" alt=" " class="img-responsive" />
-									<img src="images/22.jpg" alt=" " class="img-responsive" /> 
-									<div class="w3_hs_bottom w3_hs_bottom_sub1">
-										<ul>
-											<li>
-												<a href="#" data-toggle="modal" data-target="#myModal8"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<h5><a href="single.html">i3 Laptop</a></h5>
-								<div class="simpleCart_shelfItem">
-									<p><span>$950</span> <i class="item_price">$810</i></p>
-									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart" />
-										<input type="hidden" name="add" value="1" /> 
-										<input type="hidden" name="w3ls_item" value="i3 Laptop" /> 
-										<input type="hidden" name="amount" value="810.00"/>   
-										<button type="submit" class="w3ls-cart">Add to cart</button>
-									</form>
-								</div> 
-							</div>
-						</div> -->
 						<div class="clearfix"> </div>
 					</div>
-					<div class="w3ls_mobiles_grid_right_grid3">
-						<div class="col-md-4 agileinfo_new_products_grid agileinfo_new_products_grid_mobiles">
-							<div class="agile_ecommerce_tab_left mobiles_grid">
-								<div class="hs-wrapper hs-wrapper2"> 
-									<img src="images/p10.jpg" alt=" " class="img-responsive" />
-									<img src="images/p8.jpg" alt=" " class="img-responsive" />
-									<img src="images/p9.jpg" alt=" " class="img-responsive" />
-									<img src="images/p10.jpg" alt=" " class="img-responsive" />
-									<img src="images/p8.jpg" alt=" " class="img-responsive" /> 
-									<div class="w3_hs_bottom w3_hs_bottom_sub1">
-										<ul>
-											<li>
-												<a href="#" data-toggle="modal" data-target="#myModal7"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<h5><a href="single.html">Digital Watch2</a></h5>
-								<div class="simpleCart_shelfItem">
-									<p><span>$32</span> <i class="item_price">$29</i></p>
-									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart" />
-										<input type="hidden" name="add" value="1" /> 
-										<input type="hidden" name="w3ls_item" value="Digital Watch2" /> 
-										<input type="hidden" name="amount" value="29.00"/>   
-										<button type="submit" class="w3ls-cart">Add to cart</button>
-									</form>
-								</div> 
-							</div>
-						</div>
-						<div class="col-md-4 agileinfo_new_products_grid agileinfo_new_products_grid_mobiles">
-							<div class="agile_ecommerce_tab_left mobiles_grid">
-								<div class="hs-wrapper hs-wrapper2">
-									<img src="images/p6.jpg" alt=" " class="img-responsive" />
-									<img src="images/26.jpg" alt=" " class="img-responsive" />
-									<img src="images/31.jpg" alt=" " class="img-responsive" />
-									<img src="images/22.jpg" alt=" " class="img-responsive" />
-									<img src="images/p6.jpg" alt=" " class="img-responsive" /> 
-									<div class="w3_hs_bottom w3_hs_bottom_sub1">
-										<ul>
-											<li>
-												<a href="#" data-toggle="modal" data-target="#myModal2"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<h5><a href="single.html">Asus Tablet</a></h5>
-								<div class="simpleCart_shelfItem">
-									<p><span>$450</span> <i class="item_price">$425</i></p>
-									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart" />
-										<input type="hidden" name="add" value="1" /> 
-										<input type="hidden" name="w3ls_item" value="Asus Tablet" /> 
-										<input type="hidden" name="amount" value="425.00"/>   
-										<button type="submit" class="w3ls-cart">Add to cart</button>
-									</form>
-								</div> 
-								<div class="mobiles_grid_pos">
-									<h6>New</h6>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 agileinfo_new_products_grid agileinfo_new_products_grid_mobiles">
-							<div class="agile_ecommerce_tab_left mobiles_grid">
-								<div class="hs-wrapper hs-wrapper2">
-									<img src="images/p7.jpg" alt=" " class="img-responsive" />
-									<img src="images/p11.jpg" alt=" " class="img-responsive" />
-									<img src="images/p3.jpg" alt=" " class="img-responsive" />
-									<img src="images/p11.jpg" alt=" " class="img-responsive" />
-									<img src="images/p7.jpg" alt=" " class="img-responsive" /> 
-									<div class="w3_hs_bottom w3_hs_bottom_sub1">
-										<ul>
-											<li>
-												<a href="#" data-toggle="modal" data-target="#myModal5"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<h5><a href="single.html">Security Camera</a></h5>
-								<div class="simpleCart_shelfItem">
-									<p><span>$30</span> <i class="item_price">$22</i></p>
-									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart" />
-										<input type="hidden" name="add" value="1" /> 
-										<input type="hidden" name="w3ls_item" value="Security Camera" /> 
-										<input type="hidden" name="amount" value="22.00"/>   
-										<button type="submit" class="w3ls-cart">Add to cart</button>
-									</form>
-								</div> 
-							</div>
-						</div> 
-						<div class="clearfix"> </div>
-					</div>
-					<div class="w3ls_mobiles_grid_right_grid3">
-						<div class="col-md-4 agileinfo_new_products_grid agileinfo_new_products_grid_mobiles">
-							<div class="agile_ecommerce_tab_left mobiles_grid">
-								<div class="hs-wrapper hs-wrapper2">
-									<img src="images/p11.jpg" alt=" " class="img-responsive" />
-									<img src="images/p3.jpg" alt=" " class="img-responsive" />
-									<img src="images/p7.jpg" alt=" " class="img-responsive" />
-									<img src="images/p3.jpg" alt=" " class="img-responsive" />
-									<img src="images/p11.jpg" alt=" " class="img-responsive" />  
-									<div class="w3_hs_bottom w3_hs_bottom_sub1">
-										<ul>
-											<li>
-												<a href="#" data-toggle="modal" data-target="#myModal5"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<h5><a href="single.html">Pen Camera</a></h5>
-								<div class="simpleCart_shelfItem">
-									<p><span>$60</span> <i class="item_price">$54</i></p>
-									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart" />
-										<input type="hidden" name="add" value="1" /> 
-										<input type="hidden" name="w3ls_item" value="Pen Camera" /> 
-										<input type="hidden" name="amount" value="54.00"/>   
-										<button type="submit" class="w3ls-cart">Add to cart</button>
-									</form>
-								</div> 
-								<div class="mobiles_grid_pos">
-									<h6>New</h6>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 agileinfo_new_products_grid agileinfo_new_products_grid_mobiles">
-							<div class="agile_ecommerce_tab_left mobiles_grid">
-								<div class="hs-wrapper hs-wrapper2">
-									<img src="images/31.jpg" alt=" " class="img-responsive" />
-									<img src="images/30.jpg" alt=" " class="img-responsive" />
-									<img src="images/p6.jpg" alt=" " class="img-responsive" />
-									<img src="images/26.jpg" alt=" " class="img-responsive" />
-									<img src="images/29.jpg" alt=" " class="img-responsive" /> 
-									<div class="w3_hs_bottom w3_hs_bottom_sub1">
-										<ul>
-											<li>
-												<a href="#" data-toggle="modal" data-target="#myModal2"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<h5><a href="single.html">Golden Tablet</a></h5>
-								<div class="simpleCart_shelfItem">
-									<p><span>$650</span> <i class="item_price">$550</i></p>
-									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart" />
-										<input type="hidden" name="add" value="1" /> 
-										<input type="hidden" name="w3ls_item" value="Golden Tablet" /> 
-										<input type="hidden" name="amount" value="550.00"/>   
-										<button type="submit" class="w3ls-cart">Add to cart</button>
-									</form>
-								</div> 
-							</div>
-						</div>
-						<div class="col-md-4 agileinfo_new_products_grid agileinfo_new_products_grid_mobiles">
-							<div class="agile_ecommerce_tab_left mobiles_grid">
-								<div class="hs-wrapper hs-wrapper2">
-									<img src="images/26.jpg" alt=" " class="img-responsive" />
-									<img src="images/24.jpg" alt=" " class="img-responsive" />
-									<img src="images/23.jpg" alt=" " class="img-responsive" />
-									<img src="images/22.jpg" alt=" " class="img-responsive" />
-									<img src="images/26.jpg" alt=" " class="img-responsive" />
-									<div class="w3_hs_bottom w3_hs_bottom_sub1">
-										<ul>
-											<li>
-												<a href="#" data-toggle="modal" data-target="#myModal8"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<h5><a href="single.html">Multicolor Laptop </a></h5>
-								<div class="simpleCart_shelfItem">
-									<p><span>$650</span> <i class="item_price">$610</i></p>
-									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart" />
-										<input type="hidden" name="add" value="1" /> 
-										<input type="hidden" name="w3ls_item" value="Multicolor Laptop" /> 
-										<input type="hidden" name="amount" value="610.00"/>   
-										<button type="submit" class="w3ls-cart">Add to cart</button>
-									</form>
-								</div> 
-							</div>
-						</div>
-						<div class="clearfix"> </div>
-					</div>
+
+					<ul uib-pagination total-items="productNumber" ng-model="currentPage" items-per-page="9" style="left: 20%; position: inherit; margin-top:10%;">
+   						 <!-- <li ng-repeat="key in productNumber"><a href="" ng-click="getProductPaging(key)">{{key}}</a></li> -->
+ 					</ul>
 				</div>
 				<div class="clearfix"> </div>
+
 			</div>
 		</div>
 	</div> 
@@ -511,16 +268,17 @@
 									<input type="hidden" name="add" value="1"> 
 									<input type="hidden" name="w3ls_item" value="Asus Laptop"> 
 									<input type="hidden" name="amount" value="880.00">   
-									<button type="submit" class="w3ls-cart">Add to cart</button>
+									<button type="button" class="w3ls-cart" ng-click="addItemToCart(currentUser.userId,clickedProduct)" data-dismiss="modal">Add to cart</button>
 								</form>
 							</div>
 							<h5>Color</h5>
 							<div class="color-quality">
 								<ul>
-									<li><a href="#"><span></span></a></li>
-									<li><a href="#" class="brown"><span></span></a></li>
-									<li><a href="#" class="purple"><span></span></a></li>
-									<li><a href="#" class="gray"><span></span></a></li>
+									<li><a href=""><span></span></a></li>
+									<li><a href="" class="gray"><span></span></a></li>
+									<li><a href="" class="blue"><span></span></a></li>
+									<li><a href="" class="gold"><span></span></a></li>
+									<li><a href="" class="black"><span></span></a></li>
 								</ul>
 							</div>
 						</div>
@@ -933,102 +691,13 @@
 									<input type="hidden" name="add" value="1"> 
 									<input type="hidden" name="w3ls_item" value="Kid's Toy"> 
 									<input type="hidden" name="amount" value="100.00">   
-									<button type="submit" class="w3ls-cart">Add to cart</button>
+									<button type="button" class="w3ls-cart" ng-click="addItemToCart(currentUser.userId,product)">Add to cart</button>
 								</form> 
 							</div>
 						</div>
 					</div>
 				</li>
-				<!-- <li>
-					<div class="w3l_related_products_grid">
-						<div class="agile_ecommerce_tab_left mobiles_grid">
-							<div class="hs-wrapper hs-wrapper3">
-								<img src="images/36.jpg" alt=" " class="img-responsive" />
-								<img src="images/32.jpg" alt=" " class="img-responsive" />
-								<img src="images/33.jpg" alt=" " class="img-responsive" />
-								<img src="images/32.jpg" alt=" " class="img-responsive" />
-								<img src="images/36.jpg" alt=" " class="img-responsive" /> 
-								<div class="w3_hs_bottom">
-									<div class="flex_ecommerce">
-										<a href="#" data-toggle="modal" data-target="#myModal5"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-									</div>
-								</div>
-							</div>
-							<h5><a href="single.html">Vacuum Cleaner</a></h5>
-							<div class="simpleCart_shelfItem">
-								<p class="flexisel_ecommerce_cart"><span>$960</span> <i class="item_price">$920</i></p>
-								<form action="#" method="post">
-									<input type="hidden" name="cmd" value="_cart" />
-									<input type="hidden" name="add" value="1" /> 
-									<input type="hidden" name="w3ls_item" value="Vacuum Cleaner" /> 
-									<input type="hidden" name="amount" value="920.00"/>   
-									<button type="submit" class="w3ls-cart">Add to cart</button>
-								</form>
-							</div>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="w3l_related_products_grid">
-						<div class="agile_ecommerce_tab_left mobiles_grid">
-							<div class="hs-wrapper hs-wrapper3">
-								<img src="images/38.jpg" alt=" " class="img-responsive" />
-								<img src="images/37.jpg" alt=" " class="img-responsive" />
-								<img src="images/27.jpg" alt=" " class="img-responsive" />
-								<img src="images/28.jpg" alt=" " class="img-responsive" />
-								<img src="images/37.jpg" alt=" " class="img-responsive" /> 
-								<div class="w3_hs_bottom">
-									<div class="flex_ecommerce">
-										<a href="#" data-toggle="modal" data-target="#myModal3"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-									</div>
-								</div>
-							</div>
-							<h5><a href="single.html">Microwave Oven</a></h5>
-							<div class="simpleCart_shelfItem">
-								<p class="flexisel_ecommerce_cart"><span>$650</span> <i class="item_price">$645</i></p>
-								<form action="#" method="post">
-									<input type="hidden" name="cmd" value="_cart" />
-									<input type="hidden" name="add" value="1" /> 
-									<input type="hidden" name="w3ls_item" value="Microwave Oven" /> 
-									<input type="hidden" name="amount" value="645.00"/>   
-									<button type="submit" class="w3ls-cart">Add to cart</button>
-								</form>
-							</div>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="w3l_related_products_grid">
-						<div class="agile_ecommerce_tab_left mobiles_grid">
-							<div class="hs-wrapper hs-wrapper3">
-								<img src="images/p3.jpg" alt=" " class="img-responsive" />
-								<img src="images/p5.jpg" alt=" " class="img-responsive" />
-								<img src="images/p4.jpg" alt=" " class="img-responsive" />
-								<img src="images/p2.jpg" alt=" " class="img-responsive" />
-								<img src="images/p1.jpg" alt=" " class="img-responsive" /> 
-								<div class="w3_hs_bottom">
-									<div class="flex_ecommerce">
-										<a href="#" data-toggle="modal" data-target="#myModal4"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-									</div>
-								</div>
-							</div>
-							<h5><a href="single.html">Music MP3 Player</a></h5>
-							<div class="simpleCart_shelfItem">
-								<p><span>$60</span> <i class="item_price">$58</i></p>
-								<form action="#" method="post">
-									<input type="hidden" name="cmd" value="_cart" />
-									<input type="hidden" name="add" value="1" /> 
-									<input type="hidden" name="w3ls_item" value="Ultra MP3 Player" /> 
-									<input type="hidden" name="amount" value="58.00"/>   
-									<button type="submit" class="w3ls-cart">Add to cart</button>
-								</form>
-							</div> 
-							<div class="mobiles_grid_pos">
-								<h6>New</h6>
-							</div>
-						</div> 
-					</div>
-				</li> -->
+				
 			</ul>
 				 <flex-carousel data-options="{
            					 visibleItems:4,

@@ -33,7 +33,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat = "bill in bills.data">
+                        <tr ng-repeat = "bill in bills.data" ng-click="getBillDetailById(bill.billId)">
                           <th scope="row">{{bill.billId}}</th>
                           <td>{{bill.total}}</td>
                           <td>{{bill.payment}}</td>
