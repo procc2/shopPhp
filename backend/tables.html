@@ -33,8 +33,8 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat = "bill in bills.data" ng-click="getBillDetailById(bill.billId)">
-                          <th scope="row">{{bill.billId}}</th>
+                        <tr ng-repeat = "(key,bill) in bills.data" ng-click="getBillDetailById(bill.billId)">
+                          <th scope="row" ng-bind="key+1"></th>
                           <td>{{bill.total}}</td>
                           <td>{{bill.payment}}</td>
                           <td>{{bill.address}}</td>
@@ -64,8 +64,8 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat = "billDetail in billDetails.data">
-                          <th scope="row">{{billDetail.billDetailId}}</th>
+                        <tr ng-repeat = "(key,billDetail) in billDetails.data">
+                          <th scope="row" ng-bind="key+1"></th>
                           <td>{{billDetail.productName}}</td>
                           <td>{{billDetail.price}}</td>
                           <td>{{billDetail.quantity}}</td>
@@ -77,34 +77,8 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-6">
-              <div class="card">
-                <div class="card-header">
-                  <h4>Giỏ hàng</h4>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Tên khách hàng</th>
-                          <th>Tổng </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr ng-repeat = "cart in carts.data">
-                          <th scope="row">{{cart.cartId}}</th>
-                          <td>{{cart.userEmail}}</td>
-                          <td>{{cart.total}}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6">
+            
+            <div class="col-lg-12">
               <div class="card">
                 <div class="card-header">
                   <h4>Chi tiết giỏ </h4>
@@ -121,8 +95,8 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="cartDetail in cartDetails.data">
-                          <th scope="row">{{cartDetail.cartDetailId}}</th>
+                        <tr ng-repeat="(key,cartDetail) in cartDetails.data">
+                          <th scope="row" ng-bind="key+1"></th>
                           <td>{{cartDetail.productName}}</td>
                           <td>{{cartDetail.productPriceTotal}}</td>
                           <td>{{cartDetail.quantity}}</td>
@@ -136,30 +110,6 @@
           </div>
         </div>
       </section>
-      <footer class="main-footer">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-sm-6">
-              <p>Your company &copy; 2017-2019</p>
-            </div>
-            <div class="col-sm-6 text-right">
-              <p>Design by <a href="https://bootstrapious.com" class="external">Bootstrapious</a></p>
-              <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
-            </div>
-          </div>
-        </div>
-      </footer>
+      
     </div>
-    <!-- Javascript files-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/popper.js/umd/popper.min.js"> </script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
-    <script src="vendor/jquery.cookie/jquery.cookie.js"> </script>
-    <script src="vendor/chart.js/Chart.min.js"></script>
-    <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
-    <script src="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
-    <!-- Main File-->
-    <script src="js/front.js"></script>
-  </body>
-</html>
+    

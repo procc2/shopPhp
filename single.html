@@ -23,20 +23,24 @@
 			</div>
 			<div class="col-md-8 single-right" >
 				<h3>{{product.productName}}</h3>
-				<div class="rating1">
-					<span class="starRating">
-						<input id="rating5" type="radio" name="rating" value="5">
-						<label for="rating5">5</label>
-						<input id="rating4" type="radio" name="rating" value="4">
-						<label for="rating4">4</label>
-						<input id="rating3" type="radio" name="rating" value="3" checked>
-						<label for="rating3">3</label>
-						<input id="rating2" type="radio" name="rating" value="2">
-						<label for="rating2">2</label>
-						<input id="rating1" type="radio" name="rating" value="1">
-						<label for="rating1">1</label>
-					</span>
-				</div>
+				<div class="rating">
+								<div class="rating-left">
+									<img src="images/star-.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="rating-left">
+									<img src="images/star-.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="rating-left">
+									<img src="images/star-.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="rating-left">
+									<img src="images/star.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="rating-left">
+									<img src="images/star.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="clearfix"> </div>
+							</div>
 				<div class="description">
 					<h5><i>Description</i></h5>
 					<p>{{product.productDescript}}</p>
@@ -95,15 +99,28 @@
 							<label class="checkbox"><input type="checkbox" name="checkbox"><i> </i>128 GB</label>
 						</div>
 					</div>
+					<script type="text/javascript">
+						$("input:checkbox").on('click', function() {
+						  // in the handler, 'this' refers to the box clicked on
+						  var $box = $(this);
+						  if ($box.is(":checked")) {
+						    // the name of the box is retrieved using the .attr() method
+						    // as it is assumed and expected to be immutable
+						    var group = "input:checkbox[name='" + $box.attr("name") + "']";
+						    // the checked state of the group/box on the other hand will change
+						    // and the current value is retrieved using .prop() method
+						    $(group).prop("checked", false);
+						    $box.prop("checked", true);
+						  } else {
+						    $box.prop("checked", false);
+						  }
+						});
+					</script>
 					<div class="clearfix"> </div>
 				</div>
 				<div class="simpleCart_shelfItem">
 					<p><span>${{product.productPrice -(-30/100 * product.productPrice)}}</span> <i class="item_price">${{product.productPrice}}</i></p>
 					<form action="#" method="post">
-						<input type="hidden" name="cmd" value="_cart">
-						<input type="hidden" name="add" value="1"> 
-						<input type="hidden" name="w3ls_item" value="Smart Phone"> 
-						<input type="hidden" name="amount" value="450.00">   
 						<button type="button" class="w3ls-cart" ng-click="addItemToCart(currentUser.userId,product)">Add to cart</button>
 					</form>
 				</div> 
@@ -125,34 +142,23 @@
 					</div>	
 
 					<div class="tab-2 resp-tab-content additional_info_grid" aria-labelledby="tab_item-1">
-						<h4>(2) Reviews</h4>
-						<div class="additional_info_sub_grids">
-							<div class="col-xs-2 additional_info_sub_grid_left">
-								<img src="images/t1.png" alt=" " class="img-responsive" />
+						<h4> Reviews</h4>
+						<div class="additional_info_sub_grids" ng-repeat="(key, comment) in comments.data">
+							<div class="col-xs-1 additional_info_sub_grid_left">
+								<img src="images/avatar.png" alt=" " class="img-responsive" />
 							</div>
-							<div class="col-xs-10 additional_info_sub_grid_right">
+							<div class="col-xs-11 additional_info_sub_grid_right">
 								<div class="additional_info_sub_grid_rightl">
-									<a href="single.html">Laura</a>
-									<h5>Oct 06, 2016.</h5>
-									<p>Quis autem vel eum iure reprehenderit qui in ea voluptate 
-										velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat 
-										quo voluptas nulla pariatur.</p>
+									<a href="" ng-bind="comment.userName"></a>
+									<h5 ng-bind="comment.date"></h5>
+									<p ng-bind="comment.commentText"></p>
 								</div>
 								<div class="additional_info_sub_grid_rightr">
 									<div class="rating">
-										<div class="rating-left">
+										<div class="rating-left" ng-repeat="number in getNumber(comment.star) track by $index">
 											<img src="images/star-.png" alt=" " class="img-responsive">
 										</div>
-										<div class="rating-left">
-											<img src="images/star-.png" alt=" " class="img-responsive">
-										</div>
-										<div class="rating-left">
-											<img src="images/star-.png" alt=" " class="img-responsive">
-										</div>
-										<div class="rating-left">
-											<img src="images/star.png" alt=" " class="img-responsive">
-										</div>
-										<div class="rating-left">
+										<div class="rating-left" ng-repeat="number in getNumber(5-comment.star) track by $index">
 											<img src="images/star.png" alt=" " class="img-responsive">
 										</div>
 										<div class="clearfix"> </div>
@@ -162,50 +168,26 @@
 							</div>
 							<div class="clearfix"> </div>
 						</div>
-						<div class="additional_info_sub_grids">
-							<div class="col-xs-2 additional_info_sub_grid_left">
-								<img src="images/t2.png" alt=" " class="img-responsive" />
-							</div>
-							<div class="col-xs-10 additional_info_sub_grid_right">
-								<div class="additional_info_sub_grid_rightl">
-									<a href="single.html">Michael</a>
-									<h5>Oct 04, 2016.</h5>
-									<p>Quis autem vel eum iure reprehenderit qui in ea voluptate 
-										velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat 
-										quo voluptas nulla pariatur.</p>
-								</div>
-								<div class="additional_info_sub_grid_rightr">
-									<div class="rating">
-										<div class="rating-left">
-											<img src="images/star-.png" alt=" " class="img-responsive">
-										</div>
-										<div class="rating-left">
-											<img src="images/star-.png" alt=" " class="img-responsive">
-										</div>
-										<div class="rating-left">
-											<img src="images/star.png" alt=" " class="img-responsive">
-										</div>
-										<div class="rating-left">
-											<img src="images/star.png" alt=" " class="img-responsive">
-										</div>
-										<div class="rating-left">
-											<img src="images/star.png" alt=" " class="img-responsive">
-										</div>
-										<div class="clearfix"> </div>
-									</div>
-								</div>
-								<div class="clearfix"> </div>
-							</div>
-							<div class="clearfix"> </div>
-						</div>
-						<div class="review_grids">
+						
+						<div class="review_grids" ng-if="currentUser">
 							<h5>Add A Review</h5>
 							<form action="#" method="post">
-								<input type="text" name="Name" value="Name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Name';}" required="">
-								<input type="email" name="Email" placeholder="Email" required="">
-								<input type="text" name="Telephone" value="Telephone" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Telephone';}" required="">
-								<textarea name="Review" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Add Your Review';}" required="">Add Your Review</textarea>
-								<input type="submit" value="Submit" >
+								<div class="rating1">
+					<span class="starRating">
+						<input id="rating5" type="radio" ng-model="star" name="rating" value="5">
+						<label for="rating5">5</label>
+						<input id="rating4" type="radio" ng-model="star" name="rating" value="4">
+						<label for="rating4">4</label>
+						<input id="rating3" type="radio" ng-model="star" name="rating" value="3">
+						<label for="rating3">3</label>
+						<input id="rating2" type="radio" ng-model="star" name="rating" value="2">
+						<label for="rating2">2</label>
+						<input id="rating1" type="radio" ng-model="star" name="rating" value="1">
+						<label for="rating1">1</label>
+					</span>
+				</div>
+								<textarea name="Review"  ng-model="commentText" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Add Your Review';}" required="">Add Your Review</textarea>
+								<input type="button" value="Submit" ng-click="addNewComment(currentUser.userId,product.productId,commentText,star)">
 							</form>
 						</div>
 					</div> 			        					            	      
@@ -257,18 +239,19 @@
 								<img ng-repeat="image in product.images.data" ng-src="{{image.ImagePath}}" alt=" " class="img-responsive" />
 								<div class="w3_hs_bottom">
 									<div class="flex_ecommerce">
-										<a href="" data-toggle="modal" data-target="#myModal2" ng-click="getClickedModalProduct(product)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
+										<a href="javascript:void(0)" data-toggle="modal" data-target="#myModal3" ng-click="getClickedModalProduct(product)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
 									</div>
 								</div>
 							</div>
-							<h5><a href="javascript:void(0)" ng-click="getProductById(product.productId)">{{product.productName}}</a></h5>
+							<h5><a href="#!/single/{{product.productId}}" ng-click="scrollTop()" >{{product.productName}}</a></h5>
+							<!-- ng-click="getProductById(product.productId)" -->
 							<div class="simpleCart_shelfItem"> 
-								<p class="flexisel_ecommerce_cart"><span>${{product.productPrice}}</span> <i class="item_price">${{product.productPrice -30/100*product.productPrice}}</i></p>
+								<p class="flexisel_ecommerce_cart"><span>${{product.productPrice -(-30/100*product.productPrice)}}</span> <i class="item_price">${{product.productPrice}}</i></p>
 								<form action="#" method="post">
-									<input type="hidden" name="cmd" value="_cart">
+									<!-- <input type="hidden" name="cmd" value="_cart">
 									<input type="hidden" name="add" value="1"> 
 									<input type="hidden" name="w3ls_item" value="Kid's Toy"> 
-									<input type="hidden" name="amount" value="100.00">   
+									<input type="hidden" name="amount" value="100.00">    -->
 									<button type="button" class="w3ls-cart" ng-click="addItemToCart(currentUser.userId,product)">Add to cart</button>
 								</form> 
 							</div>
@@ -283,194 +266,7 @@
 		</div>
 	</div>
 	<!-- //Related Products -->
-	<div class="modal video-modal fade" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModal6">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
-				</div>
-				<section>
-					<div class="modal-body">
-						<div class="col-md-5 modal_body_left">
-							<img src="images/34.jpg" alt=" " class="img-responsive" />
-						</div>
-						<div class="col-md-7 modal_body_right">
-							<h4>Musical Kids Toy</h4>
-							<p>Ut enim ad minim veniam, quis nostrud 
-								exercitation ullamco laboris nisi ut aliquip ex ea 
-								commodo consequat.Duis aute irure dolor in 
-								reprehenderit in voluptate velit esse cillum dolore 
-								eu fugiat nulla pariatur. Excepteur sint occaecat 
-								cupidatat non proident, sunt in culpa qui officia 
-								deserunt mollit anim id est laborum.</p>
-							<div class="rating">
-								<div class="rating-left">
-									<img src="images/star-.png" alt=" " class="img-responsive" />
-								</div>
-								<div class="rating-left">
-									<img src="images/star-.png" alt=" " class="img-responsive" />
-								</div>
-								<div class="rating-left">
-									<img src="images/star-.png" alt=" " class="img-responsive" />
-								</div>
-								<div class="rating-left">
-									<img src="images/star.png" alt=" " class="img-responsive" />
-								</div>
-								<div class="rating-left">
-									<img src="images/star.png" alt=" " class="img-responsive" />
-								</div>
-								<div class="clearfix"> </div>
-							</div>
-							<div class="modal_body_right_cart simpleCart_shelfItem">
-								<p><span>$150</span> <i class="item_price">$100</i></p> 
-								<form action="#" method="post">
-									<input type="hidden" name="cmd" value="_cart">
-									<input type="hidden" name="add" value="1"> 
-									<input type="hidden" name="w3ls_item" value="Kids Toy"> 
-									<input type="hidden" name="amount" value="100.00">   
-									<button type="submit" class="w3ls-cart">Add to cart</button>
-								</form>
-							</div>
-							<h5>Color</h5>
-							<div class="color-quality">
-								<ul>
-									<li><a href="#"><span></span></a></li>
-									<li><a href="#" class="gray"><span></span></a></li>
-									<li><a href="#" class="blue"><span></span></a></li>
-									<li><a href="#" class="gold"><span></span></a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="clearfix"> </div>
-					</div>
-				</section>
-			</div>
-		</div>
-	</div>
-	<div class="modal video-modal fade" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModal5">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>						
-				</div>
-				<section>
-					<div class="modal-body">
-						<div class="col-md-5 modal_body_left">
-							<img src="images/36.jpg" alt=" " class="img-responsive">
-						</div>
-						<div class="col-md-7 modal_body_right">
-							<h4>Dry Vacuum Cleaner</h4>
-							<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
-								commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
-								cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-							<div class="rating">
-								<div class="rating-left">
-									<img src="images/star-.png" alt=" " class="img-responsive">
-								</div>
-								<div class="rating-left">
-									<img src="images/star-.png" alt=" " class="img-responsive">
-								</div>
-								<div class="rating-left">
-									<img src="images/star-.png" alt=" " class="img-responsive">
-								</div>
-								<div class="rating-left">
-									<img src="images/star.png" alt=" " class="img-responsive">
-								</div>
-								<div class="rating-left">
-									<img src="images/star.png" alt=" " class="img-responsive">
-								</div>
-								<div class="clearfix"> </div>
-							</div>
-							<div class="modal_body_right_cart simpleCart_shelfItem">
-								<p><span>$960</span> <i class="item_price">$920</i></p>
-								<form action="#" method="post">
-									<input type="hidden" name="cmd" value="_cart">
-									<input type="hidden" name="add" value="1"> 
-									<input type="hidden" name="w3ls_item" value="Vacuum Cleaner"> 
-									<input type="hidden" name="amount" value="920.00">   
-									<button type="submit" class="w3ls-cart">Add to cart</button>
-								</form>
-							</div>
-							<h5>Color</h5>
-							<div class="color-quality">
-								<ul>
-									<li><a href="#"><span></span></a></li>
-									<li><a href="#" class="brown"><span></span></a></li>
-									<li><a href="#" class="purple"><span></span></a></li>
-									<li><a href="#" class="gray"><span></span></a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="clearfix"> </div>
-					</div>
-				</section>
-			</div>
-		</div>
-	</div>
-	<div class="modal video-modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModal4">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
-				</div>
-				<section>
-					<div class="modal-body">
-						<div class="col-md-5 modal_body_left">
-							<img src="images/p3.jpg" alt=" " class="img-responsive" />
-						</div>
-						<div class="col-md-7 modal_body_right">
-							<h4>Music MP3 Player </h4>
-							<p>Ut enim ad minim veniam, quis nostrud 
-								exercitation ullamco laboris nisi ut aliquip ex ea 
-								commodo consequat.Duis aute irure dolor in 
-								reprehenderit in voluptate velit esse cillum dolore 
-								eu fugiat nulla pariatur. Excepteur sint occaecat 
-								cupidatat non proident, sunt in culpa qui officia 
-								deserunt mollit anim id est laborum.</p>
-							<div class="rating">
-								<div class="rating-left">
-									<img src="images/star-.png" alt=" " class="img-responsive" />
-								</div>
-								<div class="rating-left">
-									<img src="images/star-.png" alt=" " class="img-responsive" />
-								</div>
-								<div class="rating-left">
-									<img src="images/star-.png" alt=" " class="img-responsive" />
-								</div>
-								<div class="rating-left">
-									<img src="images/star-.png" alt=" " class="img-responsive" />
-								</div>
-								<div class="rating-left">
-									<img src="images/star.png" alt=" " class="img-responsive" />
-								</div>
-								<div class="clearfix"> </div>
-							</div>
-							<div class="modal_body_right_cart simpleCart_shelfItem">
-								<p><span>$60</span> <i class="item_price">$58</i></p>
-								<form action="#" method="post">
-									<input type="hidden" name="cmd" value="_cart" />
-									<input type="hidden" name="add" value="1" /> 
-									<input type="hidden" name="w3ls_item" value="MP3 Player" /> 
-									<input type="hidden" name="amount" value=" $58.00"/>   
-									<button type="submit" class="w3ls-cart">Add to cart</button>
-								</form>
-							</div>
-							<h5>Color</h5>
-							<div class="color-quality">
-								<ul>
-									<li><a href="#"><span></span></a></li>
-									<li><a href="#" class="brown"><span></span></a></li>
-									<li><a href="#" class="purple"><span></span></a></li>
-									<li><a href="#" class="gray"><span></span></a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="clearfix"> </div>
-					</div>
-				</section>
-			</div>
-		</div>
-	</div>
+	
 	<div class="modal video-modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModal3">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -480,17 +276,11 @@
 				<section>
 					<div class="modal-body">
 						<div class="col-md-5 modal_body_left">
-							<img src="images/38.jpg" alt=" " class="img-responsive">
+							<img src="{{clickedProduct.images.data[0].ImagePath}}" alt=" " class="img-responsive" />
 						</div>
 						<div class="col-md-7 modal_body_right">
-							<h4>Kitchen &amp; Dining Accessories</h4>
-							<p>Ut enim ad minim veniam, quis nostrud 
-								exercitation ullamco laboris nisi ut aliquip ex ea 
-								commodo consequat.Duis aute irure dolor in 
-								reprehenderit in voluptate velit esse cillum dolore 
-								eu fugiat nulla pariatur. Excepteur sint occaecat 
-								cupidatat non proident, sunt in culpa qui officia 
-								deserunt mollit anim id est laborum.</p>
+							<h4>{{clickedProduct.productName}}</h4>
+							<p>{{clickedProduct.productDescript}}</p>
 							<div class="rating">
 								<div class="rating-left">
 									<img src="images/star-.png" alt=" " class="img-responsive">
@@ -510,7 +300,7 @@
 								<div class="clearfix"> </div>
 							</div>
 							<div class="modal_body_right_cart simpleCart_shelfItem">
-								<p><span>$650</span> <i class="item_price">$645</i></p>
+								<p><span>${{product.productPrice -(-30/100*product.productPrice)}}</span> <i class="item_price">${{product.productPrice}}</i></p>
 								<form action="#" method="post">
 									<input type="hidden" name="cmd" value="_cart">
 									<input type="hidden" name="add" value="1"> 
@@ -522,10 +312,11 @@
 							<h5>Color</h5>
 							<div class="color-quality">
 								<ul>
-									<li><a href="#"><span></span></a></li>
-									<li><a href="#" class="brown"><span></span></a></li>
-									<li><a href="#" class="purple"><span></span></a></li>
-									<li><a href="#" class="gray"><span></span></a></li>
+									<li><a href=""><span></span></a></li>
+									<li><a href="" class="gray"><span></span></a></li>
+									<li><a href="" class="blue"><span></span></a></li>
+									<li><a href="" class="gold"><span></span></a></li>
+									<li><a href="" class="black"><span></span></a></li>
 								</ul>
 							</div>
 						</div>

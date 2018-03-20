@@ -1,6 +1,6 @@
 <?php 
 	require 'dbConnect.php';
-	$qrBillDetail = "Select * from billdetail,bill,product where 1 = 1 and bill.billId = billDetail.billId and product.productId = billDetail.productId ";
+	$qrBillDetail = "Select * from billdetail,bill,product where 1 = 1 and bill.billId = billdetail.billId and product.productId = billdetail.productId ";
 	if (isset($_GET["billId"])) {
 		$qrBillDetail .= "and billdetail.billId =".$_GET["billId"];
 	}

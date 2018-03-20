@@ -2967,7 +2967,6 @@ module.exports = viewevents = {
     readystatechange: function () {
         if (/interactive|complete/.test(document.readyState)) {
             var forms, form, i, len;
-
             // Bind to page's forms
             forms = document.getElementsByTagName('form');
 

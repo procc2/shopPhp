@@ -1,9 +1,12 @@
 <?php 
 	session_start();
 	if (isset($_SESSION["userSessionId"])) {
-		if($_SESSION["userSessionId"][3] <=4)
-		print("true");
+		//check role (if role < 4 )
+		if($_SESSION["userSessionId"]["Role"] <=4)
+		echo "true";
+		else echo "false";
 	}else{
-
+		echo "false";
 	}
+	
  ?>

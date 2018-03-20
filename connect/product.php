@@ -39,7 +39,7 @@
 		$qrProduct .= "order by RAND() limit 4";
 	}
 	else if (isset($_GET["new"])) {
-		$qrProduct .= "order by insertDate desc limit 4";
+		$qrProduct .= "order by insertDate desc";
 	}else $qrProduct.= " order by product.productId";
 	
 	if (isset($_GET["limit"])) {

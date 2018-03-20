@@ -427,7 +427,7 @@ ul.multi-column-dropdown h6 {
     padding: 29px 18px 0;
 }
 .navbar-nav > li > a {
-    padding: 20px 30px;
+    padding: 20px 50px;
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -1488,7 +1488,7 @@ h2.resp-accordion {
     color: #212121;
     padding-left: 1.5em;
 }
-.register input[type="text"],.register input[type="email"],.register input[type="password"]{
+.register input[type="text"],.register input[type="email"],.register input[type="password"],.register input[type="number"]{
 	outline:none;
 	border:1px solid #DFDFDF;
 	background:#f5f5f5;
@@ -1497,7 +1497,7 @@ h2.resp-accordion {
 	width:100%;
 	font-size:14px;
 }
-.register input[type="password"],.register input[type="email"],.register input[name="phone"]{
+.register input[type="password"],.register input[type="email"],.register input[name="phoneNumber"],.register input[name="address"]{
 	margin:1em 0 0;
 }
 div#horizontalTab ul {
@@ -2982,7 +2982,7 @@ div#horizontalTab1 ul {
 	min-height:200px;
 	margin-bottom:.8em;
 }
-.review_grids input[type="submit"]{
+.review_grids input[type="button"]{
 	outline:none;
 	padding:10px 0;
 	font-size:1em;
@@ -2991,7 +2991,7 @@ div#horizontalTab1 ul {
 	background:#ff5063;
 	border:none;
 }
-.review_grids input[type="submit"]:hover{
+.review_grids input[type="button"]:hover{
 	background:#3c43a4;
 }
 .review_grids form {

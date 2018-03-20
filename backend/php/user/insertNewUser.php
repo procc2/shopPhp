@@ -8,7 +8,7 @@
 		$uName = $data -> uName;
 		$uPhone = $data -> uPhone;
 		$uAddress = $data -> uAddress;
-		$mysqli->query("insert into user(userEmail,userPassword,userName,phoneNumber,address,Role) values('".$uEmail."','".$uPass."','".$uName."','".$uAddress."','".$uPhone."',5)");
+		$mysqli->query("insert into user(userEmail,userPassword,userName,phoneNumber,address,Role) values('".$uEmail."','".$uPass."','".$uName."','".$uPhone."','".$uAddress."',5)");
 		}else{
 			$Role = $data -> Role;
 		$mysqli->query("insert into user(userEmail,userPassword,Role) values('".$uEmail."','".$uPass."','".$Role."')");

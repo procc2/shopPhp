@@ -110,7 +110,8 @@
 									<tr ng-repeat="(key, detail) in cartDetails.data">
 										<td class="thumb"  style="width: 20%"><img ng-src="{{detail.images.data[0].ImagePath}}" alt="" style="width: 60%"></td>{{detail.images.data[0]}}
 										<td class="details">
-											<a href="#">{{detail.productName}}</a>
+											<a href="#!/single/{{detail.productId}}">{{detail.productName}}</a>
+											<!-- ng-click="setClickedProduct(detail.productId)" -->
 											<ul>
 												<li><span>Size: XL</span></li>
 												<li><span>Color: Camelot</span></li>
@@ -121,34 +122,6 @@
 										<td class="total text-center"><strong class="primary-color">${{detail.productPriceTotal}}</strong></td>
 										<td class="text-right"><button class="main-btn icon-btn" ng-click="removeItemOfCart(detail.cartDetailId,detail.productId)"><i class="fa fa-close"></i></button></td>
 									</tr>
-									<!-- <tr>
-										<td class="thumb"><img src="./img/thumb-product01.jpg" alt=""></td>
-										<td class="details">
-											<a href="#">Product Name Goes Here</a>
-											<ul>
-												<li><span>Size: XL</span></li>
-												<li><span>Color: Camelot</span></li>
-											</ul>
-										</td>
-										<td class="price text-center"><strong>$32.50</strong></td>
-										<td class="qty text-center"><input class="input" type="number" value="1"></td>
-										<td class="total text-center"><strong class="primary-color">$32.50</strong></td>
-										<td class="text-right"><button class="main-btn icon-btn"><i class="fa fa-close"></i></button></td>
-									</tr>
-									<tr>
-										<td class="thumb"><img src="./img/thumb-product01.jpg" alt=""></td>
-										<td class="details">
-											<a href="#">Product Name Goes Here</a>
-											<ul>
-												<li><span>Size: XL</span></li>
-												<li><span>Color: Camelot</span></li>
-											</ul>
-										</td>
-										<td class="price text-center"><strong>$32.50</strong></td>
-										<td class="qty text-center"><input class="input" type="number" value="1"></td>
-										<td class="total text-center"><strong class="primary-color">$32.50</strong></td>
-										<td class="text-right"><button class="main-btn icon-btn"><i class="fa fa-close"></i></button></td>
-									</tr> -->
 								</tbody>
 								<tfoot>
 									<tr>
@@ -181,17 +154,35 @@
 		</div>
 		<!-- /container -->
 	</div>
-	<div id="successModal" class="modal fade" style="display: none;">
+	<div id="emptyCart" class="modal fade" style="display: none;">
 	<div class="modal-dialog modal-confirm">
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="icon-box">
-					<i class="material-icons"></i>
+					<i class="fa fa-frown-o"></i>
 				</div>				
-				<h4 class="modal-title">Awesome!</h4>	
+				<h4 class="modal-title">Sorry Man!</h4>	
 			</div>
 			<div class="modal-body">
-				<p class="text-center">Your bill has been confirmed. Check your email for detials.</p>
+				<p class="text-center">Your cart is empty . Please go back and choose something ^^</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="notValidCustomer" class="modal fade" style="display: none;">
+	<div class="modal-dialog modal-confirm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="icon-box">
+					<i class="fa fa-frown-o"></i>
+				</div>				
+				<h4 class="modal-title">Sorry Man!</h4>	
+			</div>
+			<div class="modal-body">
+				<p class="text-center">Before checkout you shoud check your information . Please login or just input your information ! .<br/> Sorry for this inconvenience</p>
 			</div>
 			<div class="modal-footer">
 				<button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
@@ -225,7 +216,7 @@
     font-size: 36px;
     margin: 10px 0;">Great!</h4>
 				<p>Your bill has been created successfully.</p>
-				<button class="btn btn-success" data-dismiss="modal" onclick="$('#myModal').modal('hide'); $('.modal-backdrop').remove(); location.href = '#!/product';"  style=" color: #fff;
+				<button class="btn btn-success" data-dismiss="modal" onclick="$('#myModal').modal('hide'); $('.modal-backdrop').remove(); location.href = '#!/product';" style=" color: #fff;
         border-radius: 4px;
 		background: #eeb711;
 		text-decoration: none;

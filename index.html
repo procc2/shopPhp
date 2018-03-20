@@ -51,7 +51,7 @@
 <script type="text/javascript" src="js/jquery.flexisel.js"></script>
 <script type="text/javascript" src="js/ui-bootstrap-tpls-2.5.0.min.js"></script>
 </head> 
-<body ng-controller="MainController" >
+<body ng-controller="MainController" ng-class="{'sbmincart-showing' : showCart}">
 	<!-- for bootstrap working -->
 	<script type="text/javascript" src="js/bootstrap-3.1.1.min.js"></script>
 	<!-- //for bootstrap working -->
@@ -77,12 +77,16 @@
 									<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-0">
 										<div class="facts">
 											<div class="register">
+												<div class="alert alert-danger" role="alert" ng-if="wrongData" style="width: 80%;">
+												<strong>Oh sorry!</strong> Email or Password not found.
+												</div>
 												<form action="#" method="post">			
 													<input name="Email" placeholder="Email Address" type="text" required="" ng-model="email">						
-													<input name="Password" placeholder="Password" type="password" required="" ng-model="pass">										
+													<input name="Password" placeholder="Password" type="password" required="" ng-model="pass" ng-keyup="$event.keyCode == 13 ? login(email,pass) : null">										
 													<div class="sign-up">
-														<input type="button" data-toggle="modal" data-target="#loginSuccessModal" data-dismiss="modal" ng-click="login(email,pass)" value="Sign in"/>
+														<input type="button" ng-click="login(email,pass)" value="Sign in"/>
 													</div>
+													 <!-- data-toggle="modal" data-target="#loginSuccessModal" data-dismiss="modal" -->
 												</form>
 											</div>
 										</div> 
@@ -90,15 +94,47 @@
 									<div class="tab-2 resp-tab-content" aria-labelledby="tab_item-1">
 										<div class="facts">
 											<div class="register">
-												<form action="#" method="post">			
-													<input placeholder="Name" name="Name" type="text" ng-model="name" required="">
-													<input placeholder="Email Address" name="Email" type="email" ng-model="email" required="">
-													<input placeholder="Phone Number" name="phone" type="text" ng-model="phone" required="">
-													<input placeholder="Address" name="phone" type="text" ng-model="address" required="">	
-													<input placeholder="Password" name="Password" type="password" ng-model="pw" required="">	
-													<input placeholder="Confirm Password" name="Password" type="password" required="">
+												<form name="registration">			
+													<input placeholder="Name" name="Name" type="text" ng-model="name" ng-required="true">
+													
+											    	<span class="help-block" ng-show="registration.Name.$error.required && registerClicked" style="color: red">
+											                     User name is required
+											    	</span>
+													<input placeholder="Email Address" name="Email" type="email" ng-model="email" ng-required="true" ng-blur="checkExistedUser(email)">
+													<span class="help-block" ng-show="registration.Email.$error.required && registerClicked" style="color: red">
+											                     Email address is required
+											    	</span>
+											    	<span class="help-block" ng-show="duplicateMail" style="color: red">
+											                     This email is already registered !! Please try another
+											    	</span>
+													<span class="help-block" ng-show="registration.Email.$error.email" style="color: red">
+											                    Not valid Email address 
+											    	  </span>
+													<input placeholder="Phone Number" name="phoneNumber" type="text" ng-pattern = "/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/" ng-model="phone" ng-required="true">
+													<span class="help-block" ng-show="registration.phoneNumber.$error.required && registerClicked" style="color: red">
+											                     Valid phone number is required
+											    	  </span>
+											    	  <span class="help-block" ng-show="registration.phoneNumber.$error.pattern" style="color: red">
+											                     Phone number should be 10 digits and must be numberic
+											    	  </span>
+													<input placeholder="Address" name="address" type="text" ng-model="address" ng-required="true">
+													<span class="help-block" ng-show="registration.address.$error.required && registerClicked" style="color: red">
+											                     Address is required
+											    	  </span>	
+													<input placeholder="Password" name="Password" type="password" ng-minlength="6" ng-maxlength="16" ng-model="pw" ng-required="true">
+													<span class="help-block" ng-show="registration.Password.$error.required && registerClicked" style="color: red">
+											                     Password is required
+											    	  </span>
+											    	  <span class="help-block" ng-show="(registration.Password.$error.minlength || registration.Password.$error.maxlength) && registration.Password.$dirty" style="color: red">
+											                     Password must be at 6-14 characters 
+											    	  </span>	
+													<input placeholder="Confirm Password" name="confirmPass" type="password" ng-model="confirmPass" ng-required="true">
+													<span class="help-block" ng-show="wrongConfirm && registerClicked" style="color: red">
+											                     Confirm password vs Password must match
+											    	  </span>
 													<div class="sign-up">
-														<input type="button" value="Create Account" ng-click="register()" data-toggle="modal" data-target="#loginSuccessModal" data-dismiss="modal"/>
+														<input type="button" value="Create Account" ng-click="register()"/>
+														 <!-- data-toggle="modal" data-target="#loginSuccessModal" data-dismiss="modal" -->
 													</div>
 												</form>
 											</div>
@@ -125,10 +161,10 @@
 								</div>
 								<div class="col-md-12">
 									<ul class="social">
-										<li class="social_facebook"><a href="#" class="entypo-facebook"></a></li>
-										<li class="social_dribbble"><a href="#" class="entypo-dribbble"></a></li>
-										<li class="social_twitter"><a href="#" class="entypo-twitter"></a></li>
-										<li class="social_behance"><a href="#" class="entypo-behance"></a></li>
+										<li class="social_facebook"><a href="" class="entypo-facebook"></a></li>
+										<li class="social_dribbble"><a href="" class="entypo-dribbble"></a></li>
+										<li class="social_twitter"><a href="" class="entypo-twitter"></a></li>
+										<li class="social_behance"><a href="" class="entypo-behance"></a></li>
 									</ul>
 								</div>
 							</div>
@@ -151,6 +187,7 @@
                       </div>
                     </div>
                   </div>
+      <!-- Loading data -->
 	<div class="loading-spiner-holder" data-loading >
 		<i class="fa fa-spinner fa-spin" aria-hidden = "true"></i>
 	</div>
@@ -170,20 +207,21 @@
 				<input class="search_box" type="checkbox" id="search_box">
 				<label class="icon-search" for="search_box"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></label>
 				<div class="search_form">
-					<form action="" method="post">
+					<form>
 						<input type="text" list="searchValue" name="Search" placeholder="Search..." ng-model = "searchText" >
 						<datalist id="searchValue">
   						<option ng-repeat="item in allProducts.data |filter: searchText" value="{{ item.productName }}"	></option>
 						</datalist>
-						<a href="#!/product"><input type="button" value="Search" ng-click="sendSearchText(searchText); getProductByName(searchText);"></a>
+						<a href="#!/product"><input type="button" value="Search" ng-click="sendSearchText(searchText); getProductByName(searchText); scrollTop()"></a>
 					</form>
 				</div>
+
 			</div>
 			<div class="cart cart box_1"> 
 				<form action="#" method="post" class="last"> 
 					<input type="hidden" name="cmd" value="_cart" />
 					<input type="hidden" name="display" value="1" />
-					<button class="w3view-cart" name="submit" value=""><i class="fa fa-cart-arrow-down" aria-hidden="true"></i></button>
+					<button class="w3view-cart" name="submit" value="" ng-click="showHideCart()"><i class="fa fa-cart-arrow-down" aria-hidden="true"></i></button>
 				</form>   
 			</div>  
 		</div>
@@ -213,24 +251,22 @@
 									<div class="col-sm-3">
 										<ul class="multi-column-dropdown">
 											<h6>Smart World</h6>
-											<li ng-repeat = "category in categories.data"><a href="" ng-click="getProductByCategoryId(category.CategoryId)">{{category.CategoryName}}</a></li>
+											<li ng-repeat = "category in categories.data"><a href="" ng-click="getProductByCategoryId(category.CategoryId); scrollTop();">{{category.CategoryName}}</a></li>
 											<!-- <li><a href="" ng-click = "getProductByCategoryId(1)">Laptop <span>New</span></a></li> 
 											<li><a href="" ng-click = "getProductByCategoryId(4)">All Tablets<span>New</span></a></li> -->
 										</ul>
 									</div>
 									<div class="col-sm-3">
 										<ul class="multi-column-dropdown">
-											<h6>Accessories</h6>
-											<li><a href="products1.html">Laptop</a></li>
-											<li><a href="products1.html">Desktop</a></li>
-											<li><a href="products1.html">Wearables <span>New</span></a></li>
-											<li><a href="products1.html"><i>Summer Store</i></a></li>
+											<!-- <h6>Accessories</h6> -->
+											<img src="images/surface.medium" alt=" " class="img-responsive" />
+											<li><a href="" ng-click="scrollTop()"><i>Go to Store</i></a></li>
 										</ul>
 									</div>
 									<div class="col-sm-2">
 										<ul class="multi-column-dropdown">
-											<h6>Home</h6>
-											<li ng-repeat = "facturer in facturers.data"><a href="" ng-click = "getProductByFacturerId(facturer.manufacturerId)">{{facturer.manufacturerName}}</a></li>
+											<h6>With Creator</h6>
+											<li ng-repeat = "facturer in facturers.data"><a href="" ng-click = "getProductByFacturerId(facturer.manufacturerId); scrollTop();">{{facturer.manufacturerName}}</a></li>
 											<!-- <li><a href="products2.html">Camera</a></li>
 											<li><a href="products2.html">AC</a></li>
 											<li><a href="products2.html">Grinders</a></li> -->
@@ -239,21 +275,15 @@
 									<div class="col-sm-4">
 										<div class="w3ls_products_pos">
 											<h4>30%<i>Off/-</i></h4>
-											<img src="images/1.jpg" alt=" " class="img-responsive" />
+											<img src="images/camera-model.jpg" alt=" " class="img-responsive" />
 										</div>
 									</div>
 									<div class="clearfix"></div>
 								</div>
 							</ul>
 						</li>
-						<li><a href="about.html">About Us</a></li> 
-						<li class="w3pages"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="icons.html">Web Icons</a></li>
-								<li><a href="codes.html">Short Codes</a></li>     
-							</ul>
-						</li>  
-						<li><a ng-href="#!/mail">Mail Us</a></li>
+						<li><a href="#!/faq" ng-click="scrollTop()">FAQ's</a></li> 
+						<li><a ng-href="#!/mail" ng-click="scrollTop()">Mail Us</a></li>
 					</ul>
 				</div>
 			</nav>
@@ -297,43 +327,41 @@
 			<div class="w3_footer_grids">
 				<div class="col-md-3 w3_footer_grid">
 					<h3>Contact</h3>
-					<p>Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
+					<p>Please contact to the address below.Thank you so much</p>
 					<ul class="address">
-						<li><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>1234k Avenue, 4th block, <span>New York City.</span></li>
-						<li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a href="mailto:info@example.com">info@example.com</a></li>
+						<li><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>Imaginary Street , <span>Wonderland.</span></li>
+						<li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a href="mailto:info@example.com">procc@hideo.com</a></li>
 						<li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i>+1234 567 567</li>
 					</ul>
 				</div>
 				<div class="col-md-3 w3_footer_grid">
 					<h3>Information</h3>
 					<ul class="info"> 
-						<li><a href="about.html">About Us</a></li>
-						<li><a href="mail.html">Contact Us</a></li>
-						<li><a href="codes.html">Short Codes</a></li>
-						<li><a href="faq.html">FAQ's</a></li>
-						<li><a href="products.html">Special Products</a></li>
+						<li><a href="#!/mail" ng-click="scrollTop()">Contact Us</a></li>
+						<li><a href="#!/faq">FAQ's</a></li>
+						<li><a href="#!/product" ng-click="scrollTop()">Special Products</a></li>
 					</ul>
 				</div>
 				<div class="col-md-3 w3_footer_grid">
 					<h3>Category</h3>
 					<ul class="info"> 
-						<li ng-repeat = "category in categories.data"><a href="#!/product" ng-click="setClickedCategory(category.CategoryId); getProductByCategoryId(category.CategoryId)">{{category.CategoryName}}</a></li>
+						<li ng-repeat = "category in categories.data"><a href="#!/product" ng-click="setClickedCategory(category.CategoryId); getProductByCategoryId(category.CategoryId); scrollTop(); ">{{category.CategoryName}}</a></li>
 					</ul>
 				</div>
 				<div class="col-md-3 w3_footer_grid">
 					<h3>Profile</h3>
 					<ul class="info"> 
-						<li><a href="#!/">Home</a></li>
+						<li><a href="#!/" ng-click="scrollTop()">Home</a></li>
 						<li><a href="backend/">Backend Page(Just for developer)</a></li>
-						<li><a href="" ng-click="logout()">Log out</a></li>
+						<li><a href="" ng-click="logout(); scrollTop();">Log out</a></li>
 					</ul>
 					<h4>Follow Us</h4>
 					<div class="agileits_social_button">
 						<ul>
-							<li><a href="#" class="facebook"> </a></li>
-							<li><a href="#" class="twitter"> </a></li>
-							<li><a href="#" class="google"> </a></li>
-							<li><a href="#" class="pinterest"> </a></li>
+							<li><a href="" class="facebook"> </a></li>
+							<li><a href="" class="twitter"> </a></li>
+							<li><a href="" class="google"> </a></li>
+							<li><a href="" class="pinterest"> </a></li>
 						</ul>
 					</div>
 				</div>
@@ -347,7 +375,7 @@
 				</div>
 			</div>
 			<div class="container">
-				<p>&copy; 2017 Electronic Store. All rights reserved | Design by <a href="http://w3layouts.com/">W3layouts</a></p>
+				
 			</div>
 		</div>
 	</div>
@@ -371,26 +399,8 @@
 	<!-- //cart-js -->   
 	<div id="w3lssbmincart">
 		<form method="post" class="" target=""> 
-			<button type="button" class="sbmincart-closer">×</button>    
+			<button type="button" class="sbmincart-closer" ng-click="showHideCart()">×</button>    
 			<ul ng-if="cartDetails.data.length > 0">                
-				<!-- <li class="sbmincart-item sbmincart-item-changed">            
-					<div class="sbmincart-details-name">                
-						<a class="sbmincart-name" href="file:///D:/xampp/htdocs/electronic_store-web_Free30-01-2017_844071291/web/index.html">Mobile Phone1</a>                
-						<ul class="sbmincart-attributes">                                                                            </ul>           </div>            
-						<div class="sbmincart-details-quantity">               
-							<input class="sbmincart-quantity" data-sbmincart-idx="0" name="quantity_1" type="text" pattern="[0-9]*" value="1" autocomplete="off">            
-						</div>            
-						<div class="sbmincart-details-remove">                
-							<button type="button" class="sbmincart-remove" data-sbmincart-idx="0">×</button>           
-						</div>           
-						<div class="sbmincart-details-price">                
-							<span class="sbmincart-price">$350.00</span>           
-						</div>            
-						<input type="hidden" name="w3ls_item_1" value="Mobile Phone1">            
-						<input type="hidden" name="amount_1" value="350">            
-						<input type="hidden" name="shipping_1" value="undefined">            
-						<input type="hidden" name="shipping2_1" value="undefined">       
-					</li>           -->      
 					<li class="sbmincart-item" ng-repeat="(key, detail) in cartDetails.data">            
 						<div class="sbmincart-details-name">                
 							<a class="sbmincart-name" href="">{{detail.productName}}</a>               
@@ -404,11 +414,7 @@
 						</div>            
 						<div class="sbmincart-details-price">                
 							<span class="sbmincart-price">${{detail.productPriceTotal}}</span>            
-						</div>            
-						<input type="hidden" name="w3ls_item_2" value="Mobile Phone2">           
-						<input type="hidden" name="amount_2" value="302">            
-						<input type="hidden" name="shipping_2" value="undefined">            
-						<input type="hidden" name="shipping2_2" value="undefined">        
+						</div>                  
 					</li>                
 						<!-- <li class="sbmincart-item">            
 							<div class="sbmincart-details-name">                

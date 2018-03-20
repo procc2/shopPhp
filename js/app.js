@@ -62,19 +62,19 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 		getSearchText      : getSearchText
 	};
 })
-.factory('SingleService',function(){
-	var productId;
-	var transmitProductData = function(data){
-		productId = data;
-	}
-	var getProductDetail = function(){
-		return productId;
-	}
-	return {
-		transmitProductData : transmitProductData,
-		getProductDetail : getProductDetail
-	};
-})
+// .factory('SingleService',function(){
+// 	var productId;
+// 	var transmitProductData = function(data){
+// 		productId = data;
+// 	}
+// 	var getProductDetail = function(){
+// 		return productId;
+// 	}
+// 	return {
+// 		transmitProductData : transmitProductData,
+// 		getProductDetail : getProductDetail
+// 	};
+// })
 .factory('CartService', function(){
 	var cart = [];
 	function init(){
@@ -134,7 +134,6 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 		angular.forEach(cart, function(value, key){
 			if (value.productId == productId) {
 				cart.splice(key,1);
-				console.log(cart);
 			}
 		});
 		localStorage.setItem('cart',JSON.stringify(cart));
@@ -152,7 +151,7 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 		addItemHasQuantity : addItemHasQuantity
 	};
 })
-.controller('MainController', function($rootScope,$http,ProductService,$scope,SingleService,loginService,CartService){
+.controller('MainController', function($rootScope,$http,ProductService,$scope,loginService,CartService,$window){
 	$rootScope.title = "Homepage";
 	// Click to product view 
 	$http.get("connect/category.php")
@@ -161,13 +160,11 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
     });
     $http.get("connect/facturer.php?limit=4")
     .then(function (response) {
-    	console.log(response);
     	$rootScope.topbrands = response.data;
     });
     $scope.getAllProduct = function(){
     	$http.get("connect/product.php")
     	.then(function(response){
-    	console.log(response);
     	$scope.allProducts = response.data;
     });
     }
@@ -191,17 +188,6 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 			console.log(error);
 		});
 	};
-	$scope.getProductByFacturerId= function(facturerId){
-		$http.get("connect/product.php?facturerId="+facturerId)
-	    .then(function(productFacturerId){
-	    	$scope.products = productFacturerId.data;
-	    	angular.forEach(productFacturerId.data.data, function(value, key){
-				$scope.getProductImage(value);
-			});
-	    },function(error){
-			console.log(error);
-		});
-	};
 	// Auto find mobile first
 	$scope.getProductByCategoryIdLimit(3);
 	$scope.getProductImage = function(product){
@@ -214,7 +200,7 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 	}
 	// Get new product
 	$scope.getNewProduct = function(){
-		$http.get("connect/product.php?new")
+		$http.get("connect/product.php?new&limit=4")
 		.then(function(newProducts){
 			$scope.newProducts = newProducts.data;
 			angular.forEach(newProducts.data.data, function(value, key){
@@ -226,10 +212,6 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 		})
 	};
 	$scope.getNewProduct();
-	//To Detail Product Page
-	$rootScope.setClickedProduct = function(productId){
-    	SingleService.transmitProductData(productId);
-	};
 
 	// set popup data
 	$scope.getClickedModalProduct = function(product){
@@ -238,26 +220,51 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 	}
 	//Register popup
 	$rootScope.register = function(){
-		$http.post('backend/php/user/insertNewUser.php', {
+		$rootScope.registerClicked = true;
+		if($scope.pw != $scope.confirmPass){
+			$rootScope.wrongConfirm = true;
+		}else $rootScope.wrongConfirm =false;
+		if($scope.registration.$valid && $scope.wrongConfirm ==false && $scope.duplicateMail == false){
+			$http.post('backend/php/user/insertNewUser.php', {
 			'uName' : $scope.name,
 			'uEmail' : $scope.email,
 			'uPhone' : $scope.phone,
 			'uAddress' : $scope.address,
 			'uPass' : $scope.pw
 		}).then(function(response){
-			console.log(response);
 			$rootScope.login($scope.email,$scope.pw);
 		})
+		}
+	}
+	//check existed User 
+	$scope.checkExistedUser = function(email){
+		$http.get('connect/user.php?userEmail='+email)
+		.then(function(response){
+			if(response.data.status == 1){
+				$scope.duplicateMail = true;
+			}else{
+				$scope.duplicateMail = false;
+			}
+		})
+	}
+	$scope.scrollTop = function(){
+		$window.scrollTo(0, 900);
 	}
 	//Login popup
 	$rootScope.login = function (email,pass) {
 		var user = {};
 		user.email = email;
 		user.pass = pass;
-		console.log(user);
 		loginService.login(user,$scope).then(function(response){
+			if(response){
 			$rootScope.currentUser = response;
 			$rootScope.getCartDetail(response.userId);
+			$('#myModal88').modal('hide');
+			$('#loginSuccessModal').modal("show");
+			$rootScope.wrongData = false;
+			}else{
+				$rootScope.wrongData = true
+			}
 		});
 		$scope.email="";
 		$scope.pass ="";
@@ -278,8 +285,11 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 	$rootScope.getCartDetail = function(id){
 		$http.get('connect/cartDetail.php?cartId=' + id)
 		.then(function(response){
-			//console.log(response);
 			$rootScope.cartDetails = response.data;
+			angular.forEach(response.data.data, function(value, key){
+				$scope.getProductImage(value);
+				
+			});
 			if($rootScope.cartDetails.data)
 			$rootScope.total = $scope.getTotal();
 			else delete $rootScope.total;
@@ -287,15 +297,12 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 	}
 	// get current User in current Session
 	$rootScope.getSessionUser = function () {
-		console.log(loginService.getCurrenSession());
 		if(loginService.getCurrenSession()){
 		$rootScope.currentUser = loginService.getCurrenSession();
-		console.log($rootScope.currentUser);
 		$rootScope.getCartDetail($rootScope.currentUser.userId)
 	}else{
 		$rootScope.cartDetails = {};
 		$rootScope.cartDetails.data=CartService.getAll();
-		console.log($rootScope.cartDetails.data);
 		$rootScope.total = $scope.getTotal();
 	}
 	}
@@ -320,7 +327,6 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 			'price' : product.productPrice,
 			'quantity' : product.quantityNumber
 		}).then(function(response){
-			console.log(response);
 			if($rootScope.currentUser)
 			$scope.getCartDetail($rootScope.currentUser.userId);
 		});
@@ -331,6 +337,8 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 		CartService.addItem(product);
 		$rootScope.total = $scope.getTotal();
 		}
+		if (!$rootScope.showCart)
+			$scope.showHideCart();
 	}
 	$scope.removeItemOfCart = function(id,productId){
 		if($rootScope.currentUser){
@@ -346,13 +354,11 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 	}
 	$scope.updateQuantityItem = function(detailId,price,quantity,productId){
 		if($rootScope.currentUser){
-		console.log(detailId);
 		$http.post('connect/userCart/updateCartDetail.php',{
 			'quantity' : quantity,
 			'price' : price,
 			'cartDetailId' : detailId
 		}).then(function(response){
-			console.log(response);
 			$scope.getCartDetail($rootScope.currentUser.userId);
 		})
 		}else{
@@ -367,7 +373,9 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 		}
 		return total;
 	}
-
+	$scope.showHideCart = function(){
+		$rootScope.showCart = !$rootScope.showCart;
+	}
 })
 
 .config(function($routeProvider) {
@@ -380,7 +388,7 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 		templateUrl : 'products1.html',
 		controller : 'ProductCtrl',
 	})
-	.when('/single',{
+	.when('/single/:productId',{
 		templateUrl : 'single.html',
 		controller : 'SingleCtrl'
 	})
@@ -392,8 +400,22 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 		templateUrl : 'checkout.html',
 		controller : 'CheckOutController'
 	})
+	.when('/faq',{
+		templateUrl : 'faq.html',
+		controller : 'FAQCtrl'
+	})
+	.when('/404',{
+		templateUrl : '404.html',
+		
+	})
+	.otherwise({
+		redirectTo : '/404',
+	})
 })
-.controller('ProductCtrl', function($rootScope,$http,$scope,$route,ProductService,SingleService,loginService){
+.controller('FAQCtrl', function($rootScope){
+	$rootScope.title = "FAQ";
+})
+.controller('ProductCtrl', function($rootScope,$http,$scope,$route,ProductService,loginService,$window){
 	$rootScope.title = "Product";
 	$http.get("connect/category.php")
     .then(function (response) {
@@ -405,7 +427,6 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
     });
     $http.get("connect/product.php")
     .then(function(response){
-    	console.log(response);
     	$scope.products = response.data;
     	$scope.productNumber = response.data.quantity;
     	setPagingData($scope.currentPage);
@@ -426,10 +447,8 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
     function setPagingData(page) {
     $scope.currentPage = page;
     	if($scope.products.status == 1){
-    		console.log($scope.products);
     		var pagedData = $scope.products.data.slice((page - 1) * 9, page * 9);
     		$scope.productsLimit = pagedData;
-    		console.log(pagedData);
 		}else{
 			delete $scope.productsLimit 
 		}
@@ -441,7 +460,6 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
    	$rootScope.getProductByName = function(name){
    		$http.get("connect/product.php?productName="+name)
     	.then(function(response){
-    	console.log(response);
     	$scope.products = response.data;
     	$scope.productNumber = response.data.quantity;
     	setPagingData($scope.currentPage);
@@ -459,7 +477,8 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
     $rootScope.getProductByCategoryId = function(categoryId){
 		$http.get("connect/product.php?categoryId="+categoryId)
 	    .then(function(productCategoryData){
-	    	console.log(productCategoryData);
+	    	$scope.currentPage = 1;
+	    	$scope.currentSorting = $scope.sortings[0];
 	    	$scope.productNumber = productCategoryData.data.quantity;
 	    	$scope.products = productCategoryData.data;
 	    	setPagingData($scope.currentPage);
@@ -477,6 +496,8 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 	$rootScope.getProductByFacturerId= function(facturerId){
 		$http.get("connect/product.php?facturerId="+facturerId)
 	    .then(function(productFacturerId){
+	    	$scope.currentPage = 1;
+	    	$scope.currentSorting = $scope.sortings[0];
 	    	$scope.products = productFacturerId.data;
 	    	$scope.productNumber = productFacturerId.data.quantity;
 	    	setPagingData($scope.currentPage);
@@ -490,6 +511,8 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 	$scope.getProductLowerThan = function(price){
 		$http.get("connect/product.php?max=" + price)
 		.then(function(productLower){
+			$scope.currentPage = 1;
+			$scope.currentSorting = $scope.sortings[0];
 			$scope.products = productLower.data;
 			$scope.productNumber = productLower.data.quantity;
 			setPagingData($scope.currentPage);
@@ -503,6 +526,8 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 	$scope.getProductPriceBetween = function(min,max){
 		$http.get("connect/product.php?min="+min+"&max=" +max)
 		.then(function(productPriceBetween){
+			$scope.currentPage = 1;
+			$scope.currentSorting = $scope.sortings[0];
 			$scope.products = productPriceBetween.data;
 			$scope.productNumber = productPriceBetween.data.quantity;
 			setPagingData($scope.currentPage);
@@ -516,6 +541,8 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 	$scope.getProductHigherThan = function(price){
 		$http.get("connect/product.php?min=" + price)
 		.then(function(productHigher){
+			$scope.currentPage = 1;
+			$scope.currentSorting = $scope.sortings[0];
 			$scope.products = productHigher.data;
 			$scope.productNumber = productHigher.data.quantity;
 			setPagingData($scope.currentPage);
@@ -529,6 +556,8 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 	$scope.getProductByColor = function(color){
 		$http.get("connect/product.php?color=" + color)
 		.then(function(productHasColor){
+			$scope.currentPage = 1;
+			$scope.currentSorting = $scope.sortings[0];
 			$scope.products = productHasColor.data;
 			$scope.productNumber = productHasColor.data.quantity;
 			setPagingData($scope.currentPage);
@@ -542,7 +571,6 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 	$scope.getClickedModalProduct = function(product){
 		$scope.clickedProduct = product;
 		$scope.getProductImage(product);
-		console.log(product.images);
 		
 	}
 	$scope.getProductImage = function(product){
@@ -553,9 +581,9 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 		});
 		
 	}
-	$rootScope.setClickedProduct = function(productId){
-    	SingleService.transmitProductData(productId);
-	};
+	// $rootScope.setClickedProduct = function(productId){
+ //    	SingleService.transmitProductData(productId);
+	// };
 	$scope.getRandomProduct = function(){
 		$http.get("connect/product.php?random")
 		.then(function(randomProducts){
@@ -570,10 +598,61 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 	};
 	$scope.getRandomProduct();
 
+	//Sorting
+	$scope.sortings = [
+	{name:"Default sorting",
+	method : function(){
+		$scope.products.data.sort(function(a,b){
+			return parseInt(a.productId) - parseInt(b.productId);
+		})
+		setPagingData($scope.currentPage);
+	}}
 
+	,{name:"Sort by newness",
+	method : function(){
+		$scope.products.data.sort(function(a,b){
+			return new Date(b.insertDate) - new Date(a.insertDate);
+		})
+		setPagingData($scope.currentPage);
+	}},{name:"Sort by price: low to high",
+	method : function(){
+		$scope.products.data.sort(function(a,b){
+			return parseInt(a.productPrice) - parseInt(b.productPrice);
+		})
+		setPagingData($scope.currentPage);
+		
+	}},{name:"Sort by price: high to low",
+	method : function(){
+		$scope.products.data.sort(function(a,b){
+			return parseInt(b.productPrice) - parseInt(a.productPrice);
+		})
+		setPagingData($scope.currentPage);
+	}}];
+	//when begin , sorting with default
+	$scope.currentSorting = $scope.sortings[0];
+	//scroll 
+	$scope.scrollTop = function(){
+		$window.scrollTo(0, 900);
+	}
 })
-.controller('SingleCtrl', function($rootScope,$http,$scope,SingleService,CartService){
+.controller('SingleCtrl', function($rootScope,$http,$scope,CartService,$route,$routeParams,$window){
 	$rootScope.title = "SinglePage";
+	console.log($routeParams.productId);
+	$scope.$watch('routeParams',function(){
+		$scope.getProductById($routeParams.productId);
+	})
+	//comment
+	$scope.getNumber = function(num) {
+	num = parseInt(num);
+    return new Array(num);   
+	}
+	var getAllComment = function(productId){
+		$http.get('connect/productComment.php?productId='+productId)
+		.then(function(response){
+			console.log(response);
+			$scope.comments = response.data;
+		})
+	}
 	$scope.getProductById = function(id){
     	$http.get("connect/product.php?productId="+id)
 	    .then(function(product){
@@ -586,11 +665,15 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 			$scope.getRelatedProduct($scope.product.CategoryId);
 	    },function(error){
 			console.log(error);
-		});	
+		});
+		getAllComment(id);
     }
-    if(SingleService.getProductDetail()){
-	$scope.getProductById(SingleService.getProductDetail());
-	}	
+    // when click into product
+ 	$scope.getClickedModalProduct = function(product){
+		$scope.clickedProduct = product;
+		$scope.getProductImageForRelated(product);
+		
+	}
 	
     $scope.getProductImage = function(product){
 		$http.get("connect/productImage.php?productId=" +product.productId)
@@ -632,8 +715,25 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 		$scope.product.quantityNumber --;
 	}
 	
+	
+	$scope.addNewComment = function(userId,productId,comment,star){
+		$http.post('connect/productComment/addNewComment.php', {
+			'pId' : productId,
+			'uId' : userId,
+			'comment' : comment,
+			'star' : star
+		}).then(function(response){
+			console.log(response);
+			$route.reload();
+		})
+	}
+	//scroll
+	$scope.scrollTop = function(){
+		$window.scrollTo(0, 900);
+	}
+	
 })
-.controller('CheckOutController', function($rootScope,$http,$scope,CartService){
+.controller('CheckOutController', function($rootScope,$http,$scope,CartService,$window){
 	$rootScope.title = "Checkout";
 	$scope.shipping = "FreeShip";
 	$scope.payments = 'banking';
@@ -644,7 +744,7 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 			user.address = $scope.address;
 			user.phoneNumber = $scope.phone;
 		}
-
+		if(total>0 && user.userName){
 		$http.post('connect/bill/insertNewBill.php', {
 			'userId' : user.userId,
 			'userName' : user.userName,
@@ -662,8 +762,13 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 		//when success show modal
 		var myModal = angular.element( document.querySelector( '#myModal' ) );
 		myModal.modal("show");
+		$window.scrollTo(0, 900);
 		})
-		
+		}else if(!user.userName){
+			$("#notValidCustomer").modal("show");
+		}else{
+			$('#emptyCart').modal("show");
+		}
 	}
 	$scope.insertBillDetail = function(billId,productId,price,quantity,detailId){
 		$http.post('connect/bill/insertBillDetail.php',{
@@ -697,17 +802,15 @@ var webApp = angular.module('webApp', ["ngRoute","angular-flexslider","ui.bootst
 .factory('loginService',function($http,$location,sessionService,$route){
 	return{
 		login : function(data,$rootScope) {
-			console.log(data);
 			var $promise = $http.post('connect/session/userSession.php',data)
 			.then(function(response) {
-				console.log(response);
 				if(response.data.status == 1){
 					var user = response.data.data;
 					sessionService.set('user',JSON.stringify(user));
 					//$rootScope.currentUser = user;
 					return user;
 				}else{
-					console.log(response.data.msg);
+					return response;
 				}
 				
 			});

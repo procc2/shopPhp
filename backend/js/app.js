@@ -38,6 +38,8 @@ var admin = angular.module('admin', ["ngRoute","ngCookies"])
 	$scope.logout = function () {
 		loginService.logout();
 	}
+	$rootScope.currentUser = loginService.get();
+	console.log($rootScope.currentUser);
 })
 .controller('CategoryContrl', function($rootScope,$http,$scope,$route){
 	$rootScope.title = "Category Edit Page";
@@ -188,11 +190,12 @@ var admin = angular.module('admin', ["ngRoute","ngCookies"])
 		
 	};
 	$scope.insertProductImage = function(id,imagePaths){
+		debugger;
 		$http.post('php/product/insertProductImage.php', {
 			'pImages' : imagePaths,
 			'pId' : id
 		}).then(function(response){
-			console.log(response.data);
+			console.log(response);
 		},function(error){
 			console.log(error);
 		})
@@ -234,7 +237,6 @@ var admin = angular.module('admin', ["ngRoute","ngCookies"])
 		},function(error){
 			console.log(error);
 		})
-		console.log($scope.imagePaths);
 		$http.post('php/product/insertProductImage.php', {
 			'pImages' : $scope.imagePaths,
 			'pId' : $scope.pId
@@ -252,6 +254,7 @@ var admin = angular.module('admin', ["ngRoute","ngCookies"])
 	$rootScope.title = "User Page";
 	$http.get("../connect/user.php")
 	.then(function(response){
+		console.log(response);
 		$scope.users = response.data;
 	});
 	$scope.insertData = function(){
@@ -324,6 +327,7 @@ var admin = angular.module('admin', ["ngRoute","ngCookies"])
 	$scope.getBillDetailById = function(billId){
 		$http.get('../connect/billDetail.php?billId='+billId)
 		.then(function(response){
+			console.log(response);
 			$scope.billDetails = response.data;
 		})
 	}
@@ -381,8 +385,10 @@ var admin = angular.module('admin', ["ngRoute","ngCookies"])
 		isLogged : function () {
 			var $checkSessionServer = $http.post('php/session/checkSession.php');
 			return $checkSessionServer;
+		},
+		get : function(){
+			return JSON.parse(sessionService.get("user"));
 		}
-		
 	};
 })
 .run(function($rootScope,$location,loginService){
@@ -392,8 +398,8 @@ var admin = angular.module('admin', ["ngRoute","ngCookies"])
 		
 			var connected = loginService.isLogged()
 			.then(function(response){
-				console.log(response.data);
-				if(!response.data)
+				console.log(response);
+				if(response.data == "false")
 				$location.path('/login');
 			})
 			

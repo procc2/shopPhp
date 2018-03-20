@@ -53,9 +53,10 @@
 											</ul>
 										</div>
 									</div> 
-									<h5><a href="#!/single" ng-click="setClickedProduct(product.productId)">{{product.productName}}</a></h5>
+									<h5><a href="#!/single/{{product.productId}}" >{{product.productName}}</a></h5>
+									<!-- ng-click="setClickedProduct(product.productId)" -->
 									<div class="simpleCart_shelfItem">
-										<p><span>${{product.productPrice - 30}}</span> <i class="item_price">${{product.productPrice}}</i></p>
+										<p><span>${{product.productPrice -(- 30/100 * product.productPrice)}}</span> <i class="item_price">${{product.productPrice}}</i></p>
 										<form action="#" method="post">
 											<input type="hidden" name="cmd" value="_cart" />
 											<input type="hidden" name="add" value="1" /> 
@@ -182,33 +183,27 @@
 							<article style="position: absolute; width: 100%; opacity: 0;"> 
 								<div class="banner-wrap">
 									<div class="w3agile_special_deals_grid_left_grid1">
-										<img src="images/t1.png" alt=" " class="img-responsive" />
-										<p>Quis autem vel eum iure reprehenderit qui in ea voluptate 
-											velit esse quam nihil molestiae consequatur, vel illum qui dolorem 
-											eum fugiat quo voluptas nulla pariatur</p>
-										<h4>Laura</h4>
+										<img src="images/tech-1.jpg" alt=" " class="img-responsive" />
+										<p>“…whoever wants to become great among you must be your servant…For even the Son of Man did not come to be served, but to serve, and to give his life as a ransom for many.”</p>
+										<h4>&nbsp</h4>
 									</div>
 								</div>
 							</article>
 							<article style="position: absolute; width: 100%; opacity: 0;"> 
 								<div class="banner-wrap">
 									<div class="w3agile_special_deals_grid_left_grid1">
-										<img src="images/t2.png" alt=" " class="img-responsive" />
-										<p>Quis autem vel eum iure reprehenderit qui in ea voluptate 
-											velit esse quam nihil molestiae consequatur, vel illum qui dolorem 
-											eum fugiat quo voluptas nulla pariatur</p>
-										<h4>Michael</h4>
+										<img src="images/tech-2.jpg" alt=" " class="img-responsive" />
+										<p>At here, our business principles are rooted in our personal faith and beliefs. We strive to show humility, respect and fairness toward all. We are grateful for our successes and learn from our failures. We are called to use our gifts and talents to serve others. It is through this service that we are truly blessed each and every day.</p>
+										<h4>&nbsp</h4>
 									</div>
 								</div>
 							</article>
 							<article style="position: absolute; width: 100%; opacity: 0;"> 
 								<div class="banner-wrap">
 									<div class="w3agile_special_deals_grid_left_grid1">
-										<img src="images/t3.png" alt=" " class="img-responsive" />
-										<p>Quis autem vel eum iure reprehenderit qui in ea voluptate 
-											velit esse quam nihil molestiae consequatur, vel illum qui dolorem 
-											eum fugiat quo voluptas nulla pariatur</p>
-										<h4>Rosy</h4>
+										<img src="images/tech-3.png" alt=" " class="img-responsive" />
+										<p>We regularly introduce new products and always in search of people who can develop new products. If you have a new product to offer, you are welcome to contact us</p>
+										<h4>&nbsp</h4>
 									</div>
 								</div>
 							</article>
@@ -248,9 +243,10 @@
 								</ul>
 							</div>
 						</div>
-						<h5><a href="#!/single" ng-click="setClickedProduct(product.productId)">{{product.productName}}</a></h5>
+						<h5><a href="#!/single/{{product.productId}}">{{product.productName}}</a></h5>
+						<!-- ng-click="setClickedProduct(product.productId)" -->
 						<div class="simpleCart_shelfItem">
-							<p><span>${{product.productPrice}}</span> <i class="item_price">${{product.productPrice - 20}}</i></p>
+							<p><span>${{product.productPrice-(-30/100 * product.productPrice)}}</span> <i class="item_price">${{product.productPrice}}</i></p>
 							<form action="#" method="post">
 								<input type="hidden" name="cmd" value="_cart">
 								<input type="hidden" name="add" value="1"> 
